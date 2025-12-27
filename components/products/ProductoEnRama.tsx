@@ -19,6 +19,7 @@ type Props = {
 export function ProductoEnRama({ product, index, onAddToCart }: Props) {
   const productoRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const variants = product.variants?.edges || [];
 
@@ -31,8 +32,17 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     [variants, selectedVariantId]
   );
 
+  // Detectar móvil
   useEffect(() => {
-    if (!productoRef.current) return;
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Animación solo en desktop
+  useEffect(() => {
+    if (!productoRef.current || isMobile) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -42,19 +52,20 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 0.7,
+          duration: 0.5,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: productoRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+            once: true, // Solo anima una vez
           },
         }
       );
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [isMobile]);
 
   const imagen = product.images.edges[0]?.node;
   const precio = selectedVariant
@@ -63,32 +74,33 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
 
   return (
     <div className="relative flex items-center justify-center px-4 py-10">
-      {/* Contenedor clicable */}
       <div
         ref={productoRef}
         className={`
           relative z-10 max-w-md w-full cursor-pointer transition-all duration-300
+          ${isMobile ? 'opacity-100' : 'opacity-0'}
           ${isOpen ? 'bg-white rounded-2xl shadow-2xl p-6 hover:shadow-3xl' : 'bg-transparent'}
         `}
+        style={{ willChange: isMobile ? 'auto' : 'transform, opacity' }}
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {/* Nube + producto */}
         <div className="relative w-full h-64 mb-4 flex items-center justify-center">
-          {/* Nube solo cuando la card está cerrada */}
           {!isOpen && (
-          <div className="relative translate-y-24 md:translate-y-24 w-full max-w-[1200px] z-20">
-            <Image
-              src="/images/backgrounds/nubeee.png"
-              alt="Nube arbusto"
-              width={1200}
-              height={900}
-              className="w-full h-auto object-contain pointer-events-none select-none"
-            />
-          </div>
-
+            <div className="relative translate-y-24 md:translate-y-24 w-full max-w-[1200px] z-0">
+              <Image
+                src="/images/backgrounds/nube2.png"
+                alt="Nube arbusto"
+                width={1200}
+                height={900}
+                className="w-full h-auto object-contain pointer-events-none select-none"
+                priority={index < 3}
+                loading={index < 3 ? 'eager' : 'lazy'}
+              />
+            </div>
           )}
 
-          {/* Producto (siempre visible) */}
+          {/* Producto */}
           {imagen ? (
             <div className="absolute bottom-2 z-10 w-[60%] max-w-sm">
               <Image
@@ -97,6 +109,8 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                 width={600}
                 height={600}
                 className="w-full h-auto object-contain"
+                priority={index < 3}
+                loading={index < 3 ? 'eager' : 'lazy'}
               />
             </div>
           ) : (
@@ -104,18 +118,34 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
           )}
         </div>
 
-        {/* Contenido solo al abrir */}
+        {/* Contenido expandido */}
         {isOpen && (
           <div className="mt-2">
-            {/* Título */}
             <h3 className="text-2xl font-display font-bold text-frutaza-verde-oscuro mb-2">
               {product.title}
             </h3>
 
             {/* Descripción */}
-            <p className="text-gray-600 text-sm mb-4">
-              {product.description}
-            </p>
+            <div className="text-gray-600 text-sm mb-4 space-y-3">
+              {product.description
+                .split(/(\*[^*]+\*)/g)
+                .filter((line) => line.trim())
+                .map((line, i) => {
+                  const isBold = line.startsWith('*') && line.endsWith('*');
+                  return (
+                    <p
+                      key={i}
+                      className={
+                        isBold
+                          ? 'font-semibold text-frutaza-verde-oscuro'
+                          : 'leading-relaxed'
+                      }
+                    >
+                      {isBold ? line.replace(/\*/g, '') : line.trim()}
+                    </p>
+                  );
+                })}
+            </div>
 
             {/* Selector de presentación */}
             {variants.length > 1 && (
