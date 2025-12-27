@@ -76,15 +76,16 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
         <div className="relative w-full h-64 mb-4 flex items-center justify-center">
           {/* Nube solo cuando la card está cerrada */}
           {!isOpen && (
-            <div className="relative translate-y-24 md:translate-y-24 w-[80%] max-w-md z-20">
-              <Image
-                src="/images/backgrounds/nubee.png"
-                alt="Nube arbusto"
-                width={700}
-                height={500}
-                className="w-full h-auto object-contain pointer-events-none select-none"
-              />
-            </div>
+          <div className="relative translate-y-24 md:translate-y-24 w-full max-w-[1200px] z-20">
+            <Image
+              src="/images/backgrounds/nubeee.png"
+              alt="Nube arbusto"
+              width={1200}
+              height={900}
+              className="w-full h-auto object-contain pointer-events-none select-none"
+            />
+          </div>
+
           )}
 
           {/* Producto (siempre visible) */}
