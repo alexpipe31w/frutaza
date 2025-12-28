@@ -43,23 +43,25 @@
 .leaf-shadow {
   filter: drop-shadow(2px 4px 8px rgba(11, 66, 39, 0.3));
 }
+/* ========================================
+   CHATBOT DIALOGFLOW - SIN RECUADRO BLANCO
+   ======================================== */
 
 df-messenger {
   --df-messenger-button-titlebar-color: #059669;
   --df-messenger-bot-message: #059669;
   --df-messenger-send-icon: #059669;
   --df-messenger-user-message: #047857;
-  --df-messenger-chat-background-color: #fffbf5;
+  --df-messenger-chat-background-color: transparent;
   --df-messenger-font-color: white;
   --df-messenger-chat-border-radius: 20px;
+  --df-messenger-chat-border-width: 0;
   
   z-index: 9999;
-  
-  /* Animación suave al abrir */
   transition: all 0.3s ease-in-out;
 }
 
-/* Ícono flotante con sombra */
+/* Ícono flotante */
 df-messenger::part(chat-bubble) {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
@@ -70,3 +72,20 @@ df-messenger::part(chat-bubble):hover {
   transform: scale(1.05);
   box-shadow: 0 6px 25px rgba(5, 150, 105, 0.5);
 }
+
+/* QUITAR RECUADRO BLANCO - Forzado */
+df-messenger::part(chat-wrapper),
+df-messenger::part(message-list-wrapper),
+df-messenger::part(message-list),
+df-messenger::part(chat-bubble-arrow-container) {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Hacer transparente todo el contenedor del mensaje */
+df-messenger div[role="dialog"] {
+  background: transparent !important;
+}
+

@@ -19,7 +19,6 @@ export function TawkToChat() {
       />
       {/* @ts-ignore */}
       <df-messenger
-        intent="WELCOME"
         chat-title="Frutaza"
         agent-id="c70761f2-2e4b-4447-b38a-8f8905ff4fce"
         language-code="es"
