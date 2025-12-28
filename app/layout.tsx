@@ -6,7 +6,8 @@ import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
 import { ContactModalProvider } from '@/components/providers/ContactModalProvider';
 import { EfectosSelva } from '@/components/animations/EfectosSelva';
-import { TawkToChat } from '@/app/components/TawkToChat';
+import { TawkToChat } from './components/DialogflowChat';
+
 
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });

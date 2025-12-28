@@ -43,3 +43,30 @@
 .leaf-shadow {
   filter: drop-shadow(2px 4px 8px rgba(11, 66, 39, 0.3));
 }
+
+df-messenger {
+  --df-messenger-button-titlebar-color: #059669;
+  --df-messenger-bot-message: #059669;
+  --df-messenger-send-icon: #059669;
+  --df-messenger-user-message: #047857;
+  --df-messenger-chat-background-color: #fffbf5;
+  --df-messenger-font-color: white;
+  --df-messenger-chat-border-radius: 20px;
+  
+  z-index: 9999;
+  
+  /* Animación suave al abrir */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Ícono flotante con sombra */
+df-messenger::part(chat-bubble) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+  transition: transform 0.2s ease;
+}
+
+df-messenger::part(chat-bubble):hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(5, 150, 105, 0.5);
+}
