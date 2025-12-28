@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
@@ -18,6 +18,7 @@ type Props = {
   animationType?: 'float' | 'bounce' | 'swing';
   duration?: number;
   delay?: number;
+  zIndex?: number;
 };
 
 export function AnimalFlotante({
@@ -29,15 +30,25 @@ export function AnimalFlotante({
   animationType = 'float',
   duration = 6,
   delay = 0,
+  zIndex = 20,
 }: Props) {
   const animalRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Detectar móvil
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Animaciones solo en desktop
   useEffect(() => {
     const element = animalRef.current;
-    if (!element) return;
+    if (!element || isMobile) return;
 
     const ctx = gsap.context(() => {
-      // Timeline para agrupar animaciones (mejor performance)
       const tl = gsap.timeline({ delay });
 
       // Animación principal según tipo
@@ -86,7 +97,7 @@ export function AnimalFlotante({
         });
       }
 
-      // Parallax con scroll (optimizado)
+      // Parallax con scroll - SOLO DESKTOP
       gsap.to(element, {
         y: 40,
         scrollTrigger: {
@@ -94,25 +105,26 @@ export function AnimalFlotante({
           start: 'top bottom',
           end: 'bottom top',
           scrub: 1.5,
-          invalidateOnRefresh: true, // Mejor performance en resize
+          invalidateOnRefresh: true,
         },
       });
     });
 
     return () => ctx.revert();
-  }, [animationType, duration, delay]);
+  }, [animationType, duration, delay, isMobile]);
 
   return (
     <div
       ref={animalRef}
-      className="absolute pointer-events-none z-20"
+      className="absolute pointer-events-none"
       style={{
         left: `${initialX}%`,
         top: `${initialY}%`,
         width: `${size}px`,
         height: `${size}px`,
+        zIndex,
         filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2))',
-        willChange: 'transform', // Optimización GPU
+        willChange: isMobile ? 'auto' : 'transform',
       }}
     >
       <div className="relative w-full h-full">
@@ -121,7 +133,7 @@ export function AnimalFlotante({
           alt={alt} 
           fill 
           className="object-contain"
-          loading="lazy" // Carga diferida
+          loading="lazy"
         />
       </div>
     </div>

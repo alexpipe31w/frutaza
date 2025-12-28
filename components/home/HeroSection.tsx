@@ -32,7 +32,7 @@ export function HeroSection() {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detectar móvil
+  // Detectar mobile
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
@@ -40,45 +40,51 @@ export function HeroSection() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Interacción inicial - SIN animación compleja en móvil
+  // Interacción inicial - Desactivada en móvil
   useEffect(() => {
+    if (isMobile) {
+      setHasInteracted(true);
+      return;
+    }
+
     const handleInteraction = () => {
       if (!hasInteracted) {
         setHasInteracted(true);
-        
-        // Solo anima en desktop
-        if (!isMobile) {
-          gsap.fromTo(
-            contentBoxRef.current,
-            { opacity: 0, scale: 0.8, y: 50 },
-            {
-              opacity: 1,
-              scale: 1,
-              y: 0,
-              duration: 1.2,
-              ease: 'power3.out',
-            }
-          );
-        }
+        gsap.fromTo(
+          contentBoxRef.current,
+          { opacity: 0, scale: 0.8, y: 50 },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 1.2,
+            ease: 'power3.out',
+          }
+        );
       }
     };
 
-    window.addEventListener('click', handleInteraction, { once: true, passive: true });
-    window.addEventListener('scroll', handleInteraction, { once: true, passive: true });
-    window.addEventListener('touchstart', handleInteraction, { once: true, passive: true });
+    window.addEventListener('click', handleInteraction);
+    window.addEventListener('scroll', handleInteraction);
+    window.addEventListener('mousemove', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction);
+    window.addEventListener('keydown', handleInteraction);
 
     return () => {
       window.removeEventListener('click', handleInteraction);
       window.removeEventListener('scroll', handleInteraction);
+      window.removeEventListener('mousemove', handleInteraction);
       window.removeEventListener('touchstart', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
     };
   }, [hasInteracted, isMobile]);
 
-  // Animaciones GSAP solo en desktop
+  // Animaciones GSAP - Solo en desktop
   useEffect(() => {
     if (!hasInteracted || isMobile) return;
 
     const ctx = gsap.context(() => {
+      // Timeline de texto - SOLO DESKTOP
       const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       timeline
@@ -107,7 +113,7 @@ export function HeroSection() {
           '-=0.5'
         );
 
-      // Parallax solo en desktop
+      // Parallax fade out - SOLO DESKTOP
       gsap.to(contentWrapperRef.current, {
         opacity: 0,
         y: -100,
@@ -120,6 +126,7 @@ export function HeroSection() {
         },
       });
 
+      // Parallax capas - SOLO DESKTOP
       gsap.to(capa1Ref.current, {
         y: 200,
         ease: 'none',
@@ -216,29 +223,30 @@ export function HeroSection() {
           }}
         />
 
-        {/* Overlay */}
+        {/* Overlay oscuro */}
         <div
           className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/25"
           style={{ zIndex: 5 }}
         />
 
-        {/* AVES - Solo en desktop */}
+        {/* AVES VOLADORAS - Siempre visibles */}
+        <div className="absolute inset-0" style={{ zIndex: 2 }}>
+          <GuacamayaAnimated />
+          <TucanVolador />
+        </div>
+
+        {/* EFECTOS DE SELVA - Solo en desktop */}
         {!isMobile && (
-          <div className="absolute inset-0" style={{ zIndex: 10 }}>
-            <GuacamayaAnimated />
-            <TucanVolador />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ zIndex: 15 }}
+          >
+            <EfectosSelva />
           </div>
         )}
 
-        {/* EFECTOS - Reducidos en móvil */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ zIndex: 15 }}
-        >
-          {!isMobile && <EfectosSelva />}
-        </div>
-
-        {/* ANIMALES - Menos en móvil */}
+        {/* ANIMALES - Todos visibles en mobile y desktop */}
+        {/* Mariposas */}
         {(() => {
           const a = animalProps(12, 20, 200);
           return (
@@ -251,137 +259,193 @@ export function HeroSection() {
               animationType="float"
               duration={4}
               delay={0}
+              zIndex={2}
+            />
+          );
+        })()}
+        {(() => {
+          const a = animalProps(88, 30, 200);
+          return (
+            <AnimalFlotante
+              src="/images/animals/mariposa.svg"
+              alt="Mariposa"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="float"
+              duration={5}
+              delay={1}
+              zIndex={2}
+            />
+          );
+        })()}
+        {(() => {
+          const a = animalProps(25, 75, 300);
+          return (
+            <AnimalFlotante
+              src="/images/animals/mariposa.svg"
+              alt="Mariposa"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="bounce"
+              duration={3.5}
+              delay={2}
+              zIndex={2}
+            />
+          );
+        })()}
+        {(() => {
+          const a = animalProps(75, 70, 250);
+          return (
+            <AnimalFlotante
+              src="/images/animals/mariposa.svg"
+              alt="Mariposa"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="float"
+              duration={4.5}
+              delay={0.5}
+              zIndex={2}
             />
           );
         })()}
 
-        {!isMobile && (
-          <>
-            {(() => {
-              const a = animalProps(88, 30, 200);
-              return (
-                <AnimalFlotante
-                  src="/images/animals/mariposa.svg"
-                  alt="Mariposa"
-                  initialX={a.x}
-                  initialY={a.y}
-                  size={a.size}
-                  animationType="float"
-                  duration={5}
-                  delay={1}
-                />
-              );
-            })()}
+        {/* Mono */}
+        {(() => {
+          const a = animalProps(5, 20, 300);
+          return (
+            <AnimalFlotante
+              src="/images/animals/mono.svg"
+              alt="Mono"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="swing"
+              duration={7}
+              delay={2}
+              zIndex={2}
+            />
+          );
+        })()}
 
-            {(() => {
-              const a = animalProps(70, 5, 600);
-              return (
-                <AnimalFlotante
-                  src="/images/animals/mono.svg"
-                  alt="Mono"
-                  initialX={a.x}
-                  initialY={a.y}
-                  size={a.size}
-                  animationType="swing"
-                  duration={7}
-                  delay={2}
-                />
-              );
-            })()}
+        {/* Capibara */}
+        {(() => {
+          const a = animalProps(62, 50, 805);
+          return (
+            <AnimalFlotante
+              src="/images/animals/capibara.svg"
+              alt="Capibara"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="float"
+              duration={6.5}
+              delay={0}
+              zIndex={2}
+            />
+          );
+        })()}
 
-            {(() => {
-              const a = animalProps(62, 50, 805);
-              return (
-                <AnimalFlotante
-                  src="/images/animals/capibara.svg"
-                  alt="Capibara"
-                  initialX={a.x}
-                  initialY={a.y}
-                  size={a.size}
-                  animationType="float"
-                  duration={6.5}
-                  delay={0}
-                />
-              );
-            })()}
+        {/* Jaguar */}
+        {(() => {
+          const a = animalProps(20, 20, 800);
+          return (
+            <AnimalFlotante
+              src="/images/animals/jaguar.svg"
+              alt="Jaguar"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="float"
+              duration={8}
+              delay={1.5}
+              zIndex={2}
+            />
+          );
+        })()}
 
-            {(() => {
-              const a = animalProps(20, 35, 900);
-              return (
-                <AnimalFlotante
-                  src="/images/animals/jaguar.svg"
-                  alt="Jaguar"
-                  initialX={a.x}
-                  initialY={a.y}
-                  size={a.size}
-                  animationType="float"
-                  duration={8}
-                  delay={1.5}
-                />
-              );
-            })()}
-          </>
-        )}
+        {/* Tigrillo */}
+        {(() => {
+          const a = animalProps(-10, 60, 450);
+          return (
+            <AnimalFlotante
+              src="/images/animals/tigrillo.svg"
+              alt="Tigrillo"
+              initialX={a.x}
+              initialY={a.y}
+              size={a.size}
+              animationType="float"
+              duration={7}
+              delay={1}
+              zIndex={2}
+            />
+          );
+        })()}
       </div>
 
-      {/* CONTENIDO - Aparece directo en móvil */}
-      <div
-        ref={contentBoxRef}
-        className={`relative z-20 text-center px-4 max-w-5xl mx-auto transition-opacity duration-500 ${
-          hasInteracted || isMobile ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        <div className="rounded-3xl p-8 md:p-12">
-          <div ref={titleRef} className="mb-6 w-full flex justify-center">
-            <div className="relative w-full max-w-[150px] md:max-w-[220px] lg:max-w-[300px] group">
-              <Image
-                src="/images/logo-fondo-oscuro.png"
-                alt="Frutaza - Frutas Salvajes, Dulzura Natural"
-                width={1200}
-                height={400}
-                quality={100}
-                priority
-                className="w-full h-auto drop-shadow-[0_8px_16px_rgba(0,0,0,0.9)] 
-                       transition-all duration-500 
-                       group-hover:scale-105 
-                       group-hover:drop-shadow-[0_12px_24px_rgba(255,182,39,0.6)]"
-              />
+      {/* CONTENIDO HERO - Visible directo en móvil */}
+      {hasInteracted && (
+        <div
+          ref={contentBoxRef}
+          className={`relative z-20 text-center px-4 max-w-5xl mx-auto ${
+            isMobile ? 'opacity-100' : ''
+          }`}
+        >
+          <div className="rounded-3xl p-8 md:p-12">
+            <div ref={titleRef} className="mb-6 w-full flex justify-center">
+              <div className="relative w-full max-w-[150px] md:max-w-[220px] lg:max-w-[300px] group">
+                <Image
+                  src="/images/logo-fondo-oscuro.png"
+                  alt="Frutaza - Frutas Salvajes, Dulzura Natural"
+                  width={1200}
+                  height={400}
+                  quality={100}
+                  priority
+                  unoptimized
+                  className="w-full h-auto drop-shadow-[0_8px_16px_rgba(0,0,0,0.9)] 
+                         transition-all duration-500 
+                         group-hover:scale-105 
+                         group-hover:drop-shadow-[0_12px_24px_rgba(255,182,39,0.6)]"
+                />
+              </div>
+            </div>
+
+            <p
+              ref={subtitleRef}
+              className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+            >
+              Mermeladas artesanales del Caquetá hechas con frutas amazónicas
+              100% naturales
+            </p>
+
+            <div
+              ref={buttonsRef}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <Link
+                href="/products"
+                className="group px-8 py-4 bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center gap-2"
+              >
+                Ver Productos
+                <span className="group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </Link>
+
+              <Link
+                href="#historia"
+                className="px-8 py-4 bg-white/90 hover:bg-white text-frutaza-verde-oscuro rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl backdrop-blur-sm flex items-center gap-2"
+              >
+                Nuestra Esencia
+              </Link>
             </div>
           </div>
-
-          <p
-            ref={subtitleRef}
-            className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
-          >
-            Mermeladas artesanales del Caquetá hechas con frutas amazónicas 100%
-            naturales
-          </p>
-
-          <div
-            ref={buttonsRef}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <Link
-              href="/products"
-              className="group px-8 py-4 bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center gap-2"
-            >
-              Ver Productos
-              <span className="group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </Link>
-
-            <Link
-              href="#historia"
-              className="px-8 py-4 bg-white/90 hover:bg-white text-frutaza-verde-oscuro rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl backdrop-blur-sm flex items-center gap-2"
-            >
-              Nuestra Esencia
-            </Link>
-          </div>
         </div>
-      </div>
+      )}
 
-      {/* Indicador scroll */}
+      {/* Indicador de scroll */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-20">
         <div className="w-6 h-10 border-2 border-white/60 rounded-full flex justify-center pt-2">
           <div className="w-1 h-3 bg-white/60 rounded-full" />

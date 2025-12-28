@@ -89,7 +89,7 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
           {!isOpen && (
             <div className="relative translate-y-24 md:translate-y-24 w-full max-w-[1200px] z-0">
               <Image
-                src="/images/backgrounds/nube2.png"
+                src="/images/backgrounds/nube33.png"
                 alt="Nube arbusto"
                 width={1200}
                 height={900}
