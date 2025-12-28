@@ -4,8 +4,9 @@ import './globals.css';
 import { NavbarAnimated } from '@/components/layout/NavbarAnimated';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
-import { ContactModalProvider } from '@/components/providers/ContactModalProvider'; // ← NUEVO
+import { ContactModalProvider } from '@/components/providers/ContactModalProvider';
 import { EfectosSelva } from '@/components/animations/EfectosSelva';
+import { TawkToChat } from '@/app/components/TawkToChat';
 
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -43,7 +44,8 @@ export default function RootLayout({
         </main>
         <Footer />
         <CartDrawer />
-        <ContactModalProvider /> {/* ← Simple y limpio */}
+        <ContactModalProvider />
+        <TawkToChat />
       </body>
     </html>
   );
