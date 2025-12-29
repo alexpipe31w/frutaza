@@ -312,7 +312,7 @@ export function MisionSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 mt-[50px]">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 mt-[55px]">
             Un poco más sobre nosotros
           </h2>
           <div className="w-24 h-1 bg-frutaza-amarillo mx-auto rounded-full" />
