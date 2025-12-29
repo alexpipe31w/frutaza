@@ -245,144 +245,148 @@ export function HeroSection() {
           </div>
         )}
 
-        {/* ANIMALES - Todos visibles en mobile y desktop */}
-        {/* Mariposas */}
-        {(() => {
-          const a = animalProps(12, 20, 200);
-          return (
-            <AnimalFlotante
-              src="/images/animals/mariposa.svg"
-              alt="Mariposa"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="float"
-              duration={4}
-              delay={0}
-              zIndex={2}
-            />
-          );
-        })()}
-        {(() => {
-          const a = animalProps(88, 30, 200);
-          return (
-            <AnimalFlotante
-              src="/images/animals/mariposa.svg"
-              alt="Mariposa"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="float"
-              duration={5}
-              delay={1}
-              zIndex={2}
-            />
-          );
-        })()}
-        {(() => {
-          const a = animalProps(25, 75, 300);
-          return (
-            <AnimalFlotante
-              src="/images/animals/mariposa.svg"
-              alt="Mariposa"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="bounce"
-              duration={3.5}
-              delay={2}
-              zIndex={2}
-            />
-          );
-        })()}
-        {(() => {
-          const a = animalProps(75, 70, 250);
-          return (
-            <AnimalFlotante
-              src="/images/animals/mariposa.svg"
-              alt="Mariposa"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="float"
-              duration={4.5}
-              delay={0.5}
-              zIndex={2}
-            />
-          );
-        })()}
+        {/* ANIMALES - Solo en desktop */}
+        {!isMobile && (
+          <>
+            {/* Mariposas */}
+            {(() => {
+              const a = animalProps(12, 20, 200);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/mariposa.svg"
+                  alt="Mariposa"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="float"
+                  duration={4}
+                  delay={0}
+                  zIndex={2}
+                />
+              );
+            })()}
+            {(() => {
+              const a = animalProps(88, 30, 200);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/mariposa.svg"
+                  alt="Mariposa"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="float"
+                  duration={5}
+                  delay={1}
+                  zIndex={2}
+                />
+              );
+            })()}
+            {(() => {
+              const a = animalProps(25, 75, 300);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/mariposa.svg"
+                  alt="Mariposa"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="bounce"
+                  duration={3.5}
+                  delay={2}
+                  zIndex={2}
+                />
+              );
+            })()}
+            {(() => {
+              const a = animalProps(75, 70, 250);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/mariposa.svg"
+                  alt="Mariposa"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="float"
+                  duration={4.5}
+                  delay={0.5}
+                  zIndex={2}
+                />
+              );
+            })()}
 
-        {/* Mono */}
-        {(() => {
-          const a = animalProps(5, 20, 300);
-          return (
-            <AnimalFlotante
-              src="/images/animals/mono.svg"
-              alt="Mono"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="swing"
-              duration={7}
-              delay={2}
-              zIndex={2}
-            />
-          );
-        })()}
+            {/* Mono */}
+            {(() => {
+              const a = animalProps(5, 20, 300);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/mono.svg"
+                  alt="Mono"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="swing"
+                  duration={7}
+                  delay={2}
+                  zIndex={2}
+                />
+              );
+            })()}
 
-        {/* Capibara */}
-        {(() => {
-          const a = animalProps(62, 50, 805);
-          return (
-            <AnimalFlotante
-              src="/images/animals/capibara.svg"
-              alt="Capibara"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="float"
-              duration={6.5}
-              delay={0}
-              zIndex={2}
-            />
-          );
-        })()}
+            {/* Capibara */}
+            {(() => {
+              const a = animalProps(62, 50, 805);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/capibara.svg"
+                  alt="Capibara"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="float"
+                  duration={6.5}
+                  delay={0}
+                  zIndex={2}
+                />
+              );
+            })()}
 
-        {/* Jaguar */}
-        {(() => {
-          const a = animalProps(20, 20, 800);
-          return (
-            <AnimalFlotante
-              src="/images/animals/jaguar.svg"
-              alt="Jaguar"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="float"
-              duration={8}
-              delay={1.5}
-              zIndex={2}
-            />
-          );
-        })()}
+            {/* Jaguar */}
+            {(() => {
+              const a = animalProps(20, 20, 800);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/jaguar.svg"
+                  alt="Jaguar"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="float"
+                  duration={8}
+                  delay={1.5}
+                  zIndex={2}
+                />
+              );
+            })()}
 
-        {/* Tigrillo */}
-        {(() => {
-          const a = animalProps(-10, 60, 450);
-          return (
-            <AnimalFlotante
-              src="/images/animals/tigrillo.svg"
-              alt="Tigrillo"
-              initialX={a.x}
-              initialY={a.y}
-              size={a.size}
-              animationType="float"
-              duration={7}
-              delay={1}
-              zIndex={2}
-            />
-          );
-        })()}
+            {/* Tigrillo */}
+            {(() => {
+              const a = animalProps(-10, 60, 450);
+              return (
+                <AnimalFlotante
+                  src="/images/animals/tigrillo.svg"
+                  alt="Tigrillo"
+                  initialX={a.x}
+                  initialY={a.y}
+                  size={a.size}
+                  animationType="float"
+                  duration={7}
+                  delay={1}
+                  zIndex={2}
+                />
+              );
+            })()}
+          </>
+        )}
       </div>
 
       {/* CONTENIDO HERO - Visible directo en móvil */}

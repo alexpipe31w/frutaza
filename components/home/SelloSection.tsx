@@ -347,7 +347,7 @@ export function SelloSection() {
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-display font-bold text-white mb-6">
+          <h2 className="text-5xl md:text-6xl font-display font-bold text-white mb-6 mt-10">
             El Sello Frutaza
           </h2>
           <p className="text-xl text-white/90 max-w-3xl mx-auto">
