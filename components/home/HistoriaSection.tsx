@@ -206,7 +206,7 @@ export function HistoriaSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
           {/* Contenido de texto - Izquierda */}
           <div className="text-white space-y-6">
-            <h2 ref={titleRef} className="text-5xl md:text-6xl font-display font-bold mb-8 mt-[55px]">
+            <h2 ref={titleRef} className="text-5xl md:text-6xl font-display font-bold mb-8 mt-[60px]">
               Nuestra Esencia
             </h2>
             <p className="text-xl md:text-2xl leading-relaxed">
