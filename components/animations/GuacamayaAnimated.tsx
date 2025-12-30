@@ -20,8 +20,8 @@ export function GuacamayaAnimated() {
     alaHeight: 110,
     alaLeft: 178,
     alaTop: '40%',
-    velocidad: 20,
-    aleteoVelocidad: 0.3,
+    velocidad: 25,
+    aleteoVelocidad: 0.35,
     aleteoAngulo: 20,
   };
 
@@ -61,14 +61,7 @@ export function GuacamayaAnimated() {
       });
 
       // ✨ ANIMACIÓN DE ALETEO - Ala Izquierda (atrás)
-      const timelineLeft = gsap.timeline({ repeat: -1 });
-      
-      timelineLeft.to(wingLeftRef.current, {
-        rotation: config.aleteoAngulo, // Invertido: positivo para arriba
-        scaleY: -1,
-        duration: config.aleteoVelocidad,
-        ease: 'power2.out',
-      });
+
       
       timelineLeft.to(wingLeftRef.current, {
         rotation: -config.aleteoAngulo * 0.3, // Invertido: negativo para abajo
@@ -104,27 +97,6 @@ export function GuacamayaAnimated() {
       className="absolute top-24 left-0 z-50 pointer-events-none"
       style={{ width: `${config.containerWidth}px`, height: `${config.containerHeight}px` }}
     >
-      <div className="relative w-full h-full" style={{ perspective: '1000px' }}>
-        {/* Ala Izquierda (atrás) */}
-        <div
-          ref={wingLeftRef}
-          className="absolute z-10"
-          style={{ 
-            left: `${config.alaLeft}px`,
-            top: config.alaTop,
-            width: `${config.alaWidth}px`,
-            height: `${config.alaHeight}px`,
-            transformOrigin: 'left center', // ← CAMBIO: left en vez de right
-            transform: 'translateY(-50%)',
-          }}
-        >
-          <Image 
-            src="/images/animals/guacamaya/guacamaya-ala-izquierda.svg" 
-            alt="" 
-            fill 
-            className="object-contain"
-          />
-        </div>
         
         {/* Cuerpo */}
         <div 
