@@ -20,9 +20,9 @@ export function GuacamayaAnimated() {
     alaHeight: 110,
     alaLeft: 178,
     alaTop: '40%',
-    velocidad: 25,
+    velocidad: 20,
     aleteoVelocidad: 0.35,
-    aleteoAngulo: 20,
+    aleteoAngulo: 22, // un poco más marcado, pero igual en ambas
   };
 
   useEffect(() => {
@@ -60,32 +60,24 @@ export function GuacamayaAnimated() {
         ease: 'sine.inOut',
       });
 
-      // ✨ ANIMACIÓN DE ALETEO - Ala Izquierda (atrás)
+      // 🪽 ALETEO SINCRONIZADO (UNA SOLA TIMELINE PARA AMBAS ALAS)
+      const flapTl = gsap.timeline({ repeat: -1, yoyo: true });
 
-      
-      timelineLeft.to(wingLeftRef.current, {
-        rotation: -config.aleteoAngulo * 0.3, // Invertido: negativo para abajo
-        scaleY: 1,
-        duration: config.aleteoVelocidad,
-        ease: 'power2.in',
-      });
-
-      // ✨ ANIMACIÓN DE ALETEO - Ala Derecha (adelante)
-      const timelineRight = gsap.timeline({ repeat: -1, delay: config.aleteoVelocidad * 0.5 });
-      
-      timelineRight.to(wingRightRef.current, {
-        rotation: config.aleteoAngulo, // Invertido: positivo para arriba
-        scaleY: -1,
-        duration: config.aleteoVelocidad,
-        ease: 'power2.out',
-      });
-      
-      timelineRight.to(wingRightRef.current, {
-        rotation: -config.aleteoAngulo * 0.3, // Invertido: negativo para abajo
-        scaleY: 1,
-        duration: config.aleteoVelocidad,
-        ease: 'power2.in',
-      });
+      flapTl.to(
+        [wingLeftRef.current, wingRightRef.current],
+        {
+          rotation: config.aleteoAngulo,
+          duration: config.aleteoVelocidad,
+          ease: 'power2.inOut',
+        }
+      ).to(
+        [wingLeftRef.current, wingRightRef.current],
+        {
+          rotation: -config.aleteoAngulo,
+          duration: config.aleteoVelocidad,
+          ease: 'power2.inOut',
+        }
+      );
     });
 
     return () => ctx.revert();
@@ -97,9 +89,30 @@ export function GuacamayaAnimated() {
       className="absolute top-24 left-0 z-50 pointer-events-none"
       style={{ width: `${config.containerWidth}px`, height: `${config.containerHeight}px` }}
     >
-        
+      <div className="relative w-full h-full" style={{ perspective: '1000px' }}>
+        {/* Ala Izquierda (atrás) */}
+        <div
+          ref={wingLeftRef}
+          className="absolute z-10"
+          style={{
+            left: `${config.alaLeft}px`,
+            top: config.alaTop,
+            width: `${config.alaWidth}px`,
+            height: `${config.alaHeight}px`,
+            transformOrigin: 'left center', // mismo origen en ambas
+            transform: 'translateY(-50%)',
+          }}
+        >
+          <Image
+            src="/images/animals/guacamaya/guacamaya-ala-izquierda.svg"
+            alt=""
+            fill
+            className="object-contain"
+          />
+        </div>
+
         {/* Cuerpo */}
-        <div 
+        <div
           ref={cuerpoRef}
           className="absolute z-20"
           style={{
@@ -110,31 +123,31 @@ export function GuacamayaAnimated() {
             height: `${config.cuerpoHeight}px`,
           }}
         >
-          <Image 
-            src="/images/animals/guacamaya/guacamaya-cuerpo.svg" 
-            alt="Guacamaya" 
-            fill 
+          <Image
+            src="/images/animals/guacamaya/guacamaya-cuerpo.svg"
+            alt="Guacamaya"
+            fill
             className="object-contain"
           />
         </div>
-        
+
         {/* Ala Derecha (adelante) */}
         <div
           ref={wingRightRef}
           className="absolute z-30"
-          style={{ 
+          style={{
             left: `${config.alaLeft}px`,
             top: config.alaTop,
             width: `${config.alaWidth}px`,
             height: `${config.alaHeight}px`,
-            transformOrigin: 'left center', // ← CAMBIO: left en vez de right
+            transformOrigin: 'left center', // exactamente igual
             transform: 'translateY(-50%)',
           }}
         >
-          <Image 
-            src="/images/animals/guacamaya/guacamaya-ala-derecha.svg" 
-            alt="" 
-            fill 
+          <Image
+            src="/images/animals/guacamaya/guacamaya-ala-derecha.svg"
+            alt=""
+            fill
             className="object-contain"
           />
         </div>
