@@ -18,7 +18,7 @@ export function GuacamayaAnimated() {
     alaWidth: 200,
     alaHeight: 110,
     alaLeft: 178,
-    alaTop: '38%',
+    alaTop: '45%',
     velocidad: 20,
     aleteoVelocidad: 0.35,
     aleteoAngulo: 20,
