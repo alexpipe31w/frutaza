@@ -10,7 +10,6 @@ export function GuacamayaAnimated() {
   const wingLeftRef = useRef<HTMLDivElement>(null);
   const wingRightRef = useRef<HTMLDivElement>(null);
 
-  // ⚙️ CONFIGURACIÓN
   const config = {
     containerWidth: 500,
     containerHeight: 300,
@@ -22,14 +21,13 @@ export function GuacamayaAnimated() {
     alaTop: '40%',
     velocidad: 20,
     aleteoVelocidad: 0.35,
-    aleteoAngulo: 22, // un poco más marcado, pero igual en ambas
+    aleteoAngulo: 20,
   };
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Vuelo horizontal de izquierda a derecha
       gsap.fromTo(
         containerRef.current,
         { x: '-200px' },
@@ -42,7 +40,6 @@ export function GuacamayaAnimated() {
         }
       );
 
-      // Efecto BOUNCE en el cuerpo
       gsap.to(cuerpoRef.current, {
         scale: 1.08,
         duration: 0.4,
@@ -51,7 +48,6 @@ export function GuacamayaAnimated() {
         ease: 'power1.inOut',
       });
 
-      // Movimiento vertical suave
       gsap.to(containerRef.current, {
         y: '-=30',
         duration: 2.2,
@@ -60,24 +56,40 @@ export function GuacamayaAnimated() {
         ease: 'sine.inOut',
       });
 
-      // 🪽 ALETEO SINCRONIZADO (UNA SOLA TIMELINE PARA AMBAS ALAS)
-      const flapTl = gsap.timeline({ repeat: -1, yoyo: true });
+      // Ala izquierda
+      const timelineLeft = gsap.timeline({ repeat: -1 });
 
-      flapTl.to(
-        [wingLeftRef.current, wingRightRef.current],
-        {
-          rotation: config.aleteoAngulo,
-          duration: config.aleteoVelocidad,
-          ease: 'power2.inOut',
-        }
-      ).to(
-        [wingLeftRef.current, wingRightRef.current],
-        {
-          rotation: -config.aleteoAngulo,
-          duration: config.aleteoVelocidad,
-          ease: 'power2.inOut',
-        }
-      );
+      timelineLeft.to(wingLeftRef.current, {
+        rotation: config.aleteoAngulo,
+        scaleY: -1,
+        duration: config.aleteoVelocidad,
+        ease: 'power2.out',
+      });
+
+      timelineLeft.to(wingLeftRef.current, {
+        rotation: -config.aleteoAngulo * 0.3,
+        scaleY: 1,
+        duration: config.aleteoVelocidad,
+        ease: 'power2.in',
+      });
+
+      // Ala derecha (SIN delay, misma animación)
+      const timelineRight = gsap.timeline({ repeat: -1 });
+      //                        ↑ aquí solo quitamos el delay
+
+      timelineRight.to(wingRightRef.current, {
+        rotation: config.aleteoAngulo,
+        scaleY: -1,
+        duration: config.aleteoVelocidad,
+        ease: 'power2.out',
+      });
+
+      timelineRight.to(wingRightRef.current, {
+        rotation: -config.aleteoAngulo * 0.3,
+        scaleY: 1,
+        duration: config.aleteoVelocidad,
+        ease: 'power2.in',
+      });
     });
 
     return () => ctx.revert();
@@ -99,7 +111,7 @@ export function GuacamayaAnimated() {
             top: config.alaTop,
             width: `${config.alaWidth}px`,
             height: `${config.alaHeight}px`,
-            transformOrigin: 'left center', // mismo origen en ambas
+            transformOrigin: 'left center',
             transform: 'translateY(-50%)',
           }}
         >
@@ -140,7 +152,7 @@ export function GuacamayaAnimated() {
             top: config.alaTop,
             width: `${config.alaWidth}px`,
             height: `${config.alaHeight}px`,
-            transformOrigin: 'left center', // exactamente igual
+            transformOrigin: 'left center',
             transform: 'translateY(-50%)',
           }}
         >
