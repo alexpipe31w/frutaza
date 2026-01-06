@@ -218,6 +218,21 @@ export function Footer() {
                 </svg>
                 <span className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">en el Caquetá, Colombia</span>
               </div>
+                                // En el footer, después del copyright
+                  <div className="text-center text-sm text-white/80 mt-4">
+                    <p className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                      Diseñado y desarrollado por{' '}
+                      <a 
+                        href="https://alex-rodriguez-portfol.vercel.app" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-frutaza-verde-vivo hover:text-frutaza-amarillo transition-colors duration-300 font-semibold"
+                      >
+                        Alex Rodríguez
+                      </a>
+                    </p>
+                  </div>
+
             </div>
           </div>
         </div>
