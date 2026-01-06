@@ -87,7 +87,7 @@ export default function BlogPage() {
     async function fetchTikTokVideos() {
       try {
         setLoading(true);
-        const response = await fetch('/api/tiktok-auto');
+        const response = await fetch('/api/tiktok-refresh');
         const data = await response.json();
         
         if (data.success && data.videos) {
