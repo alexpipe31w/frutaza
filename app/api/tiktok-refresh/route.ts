@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { writeFileSync } from 'fs';
-import { join } from 'path';
 
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
 const APIFY_ACTOR_ID = 'GdWCkxBtKWOsKjdch';
+const EDGE_CONFIG_ID = process.env.EDGE_CONFIG_ID;
+const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
 
 export async function GET() {
   try {
-    if (!APIFY_API_TOKEN) {
-      throw new Error('APIFY_API_TOKEN is missing');
+    if (!APIFY_API_TOKEN || !EDGE_CONFIG_ID || !VERCEL_TOKEN) {
+      throw new Error('Missing environment variables');
     }
 
     console.log(`🚀 Ejecutando scraper semanal para @fruta.za...`);
@@ -17,9 +17,7 @@ export async function GET() {
       `https://api.apify.com/v2/acts/${APIFY_ACTOR_ID}/run-sync-get-dataset-items?token=${APIFY_API_TOKEN}`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profiles: ['@fruta.za'],
           resultsPerPage: 15,
@@ -36,9 +34,8 @@ export async function GET() {
     }
 
     const results = await response.json();
-    console.log(`✅ Obtenidos ${results.length} videos de @fruta.za`);
+    console.log(`✅ Obtenidos ${results.length} videos`);
 
-    // Enriquecer con oEmbed
     const videosWithMetadata = await Promise.all(
       results.slice(0, 15).map(async (item: any) => {
         const videoId = item.webVideoUrl?.split('/video/')[1] || '';
@@ -74,17 +71,31 @@ export async function GET() {
       })
     );
 
-    // 📝 Guardar en JSON
     const dataToSave = {
       videos: videosWithMetadata,
       fetched_at: new Date().toISOString(),
       total_videos: videosWithMetadata.length,
     };
 
-    const filePath = join(process.cwd(), 'public', 'data', 'tiktok.json');
-    writeFileSync(filePath, JSON.stringify(dataToSave, null, 2), 'utf-8');
+    // Guardar en Edge Config vía API
+    await fetch(`https://api.vercel.com/v1/edge-config/${EDGE_CONFIG_ID}/items`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${VERCEL_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        items: [
+          {
+            operation: 'upsert',
+            key: 'tiktok_videos',
+            value: dataToSave,
+          },
+        ],
+      }),
+    });
 
-    console.log(`💾 Videos guardados en ${filePath}`);
+    console.log(`✅ Videos guardados en Edge Config`);
 
     return NextResponse.json({
       success: true,
@@ -94,13 +105,9 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('💥 Error completo:', error);
-    
+    console.error('💥 Error:', error);
     return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : 'Unknown error',
-        success: false,
-      },
+      { error: error instanceof Error ? error.message : 'Unknown error', success: false },
       { status: 500 }
     );
   }

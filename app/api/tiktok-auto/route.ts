@@ -1,31 +1,30 @@
 import { NextResponse } from 'next/server';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { get } from '@vercel/edge-config';
 
-export const revalidate = 3600; // 1 hora (porque ya no cambia seguido)
+export const revalidate = 3600; // 1 hora
 
 export async function GET() {
   try {
-    const filePath = join(process.cwd(), 'public', 'data', 'tiktok.json');
-    const fileContent = readFileSync(filePath, 'utf-8');
-    const data = JSON.parse(fileContent);
+    const data = await get('tiktok_videos');
+
+    if (!data) {
+      return NextResponse.json(
+        { error: 'No hay videos disponibles', videos: [], success: false },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json({
-      videos: data.videos || [],
+      videos: (data as any).videos || [],
       success: true,
-      fetched_at: data.fetched_at,
-      total_videos: data.total_videos,
+      fetched_at: (data as any).fetched_at,
+      total_videos: (data as any).total_videos,
     });
 
   } catch (error) {
-    console.error('Error leyendo tiktok.json:', error);
-    
+    console.error('Error leyendo Edge Config:', error);
     return NextResponse.json(
-      {
-        error: 'No hay videos disponibles',
-        videos: [],
-        success: false,
-      },
+      { error: 'Error al obtener videos', videos: [], success: false },
       { status: 500 }
     );
   }
