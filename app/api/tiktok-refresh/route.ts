@@ -22,7 +22,7 @@ export async function GET() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profiles: ['@fruta.za'],
-          resultsPerPage: 15,
+          resultsPerPage: 20,
           shouldDownloadVideos: false,
           shouldDownloadCovers: false,
         }),
@@ -39,7 +39,7 @@ export async function GET() {
     console.log(`✅ Obtenidos ${results.length} videos`);
 
     const videosWithMetadata = await Promise.all(
-      results.slice(0, 15).map(async (item: any) => {
+      results.slice(0, 20).map(async (item: any) => {
         const videoId = item.webVideoUrl?.split('/video/')[1] || '';
         
         let oembedData = null;
@@ -90,7 +90,7 @@ export async function GET() {
         items: [
           {
             operation: 'upsert',
-            key: 'tiktok_videos',
+            key: 'tiktok-videos',
             value: dataToSave,
           },
         ],
