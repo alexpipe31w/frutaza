@@ -13,7 +13,7 @@ export async function GET() {
       throw new Error('Missing environment variables');
     }
 
-    console.log(`Ì∫Ä Ejecutando scraper semanal para @fruta.za...`);
+    console.log('Ejecutando scraper semanal para @fruta.za...');
 
     const response = await fetch(
       `https://api.apify.com/v2/acts/${APIFY_ACTOR_ID}/run-sync-get-dataset-items?token=${APIFY_API_TOKEN}`,
@@ -31,12 +31,12 @@ export async function GET() {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('‚ùå Error Apify:', response.status, errorText);
+      console.error('Error Apify:', response.status, errorText);
       throw new Error(`Apify error: ${response.status}`);
     }
 
     const results = await response.json();
-    console.log(`‚úÖ Obtenidos ${results.length} videos`);
+    console.log(`Obtenidos ${results.length} videos`);
 
     const videosWithMetadata = await Promise.all(
       results.slice(0, 15).map(async (item: any) => {
@@ -79,7 +79,6 @@ export async function GET() {
       total_videos: videosWithMetadata.length,
     };
 
-    // Guardar en Edge Config v√≠a API de Vercel
     const updateResponse = await fetch(
       `https://api.vercel.com/v1/edge-config/${EDGE_CONFIG_ID}/items`,
       {
@@ -102,11 +101,11 @@ export async function GET() {
 
     if (!updateResponse.ok) {
       const errorText = await updateResponse.text();
-      console.error('‚ùå Error guardando en Edge Config:', updateResponse.status, errorText);
-      throw new Error(`Edge Config update error: ${updateResponse.status} - ${errorText}`);
+      console.error('Error guardando en Edge Config:', updateResponse.status, errorText);
+      throw new Error(`Edge Config update error: ${updateResponse.status}`);
     }
 
-    console.log(`‚úÖ Videos guardados en Edge Config`);
+    console.log('Videos guardados en Edge Config');
 
     return NextResponse.json({
       success: true,
@@ -116,7 +115,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Ì≤• Error:', error);
+    console.error('Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Unknown error', success: false },
       { status: 500 }
