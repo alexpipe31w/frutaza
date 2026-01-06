@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { get } from '@vercel/edge-config';
 
+export const dynamic = 'force-dynamic'; // ⬅️ AGREGA ESTA LÍNEA
 export const revalidate = 3600; // 1 hora
 
 export async function GET() {

@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic'; //
+
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
 const APIFY_ACTOR_ID = 'GdWCkxBtKWOsKjdch';
 const EDGE_CONFIG_ID = process.env.EDGE_CONFIG_ID;
