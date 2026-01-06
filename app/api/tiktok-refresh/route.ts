@@ -22,7 +22,7 @@ export async function GET() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profiles: ['@fruta.za'],
-          resultsPerPage: 15,
+          resultsPerPage: 9,
           shouldDownloadVideos: false,
           shouldDownloadCovers: false,
         }),
@@ -39,7 +39,7 @@ export async function GET() {
     console.log(`Obtenidos ${results.length} videos`);
 
     const videosWithMetadata = await Promise.all(
-      results.slice(0, 15).map(async (item: any) => {
+      results.slice(0, 9).map(async (item: any) => {
         const videoId = item.webVideoUrl?.split('/video/')[1] || '';
         
         let oembedData = null;
@@ -61,7 +61,6 @@ export async function GET() {
           thumbnail_url: oembedData?.thumbnail_url || item['authorMeta.avatar'] || '',
           author_name: item['authorMeta.name'] || 'Fruta.za',
           author_url: `https://www.tiktok.com/@${item['authorMeta.name'] || 'fruta.za'}`,
-          embed_html: oembedData?.html || '',
           stats: {
             likes: item.diggCount || 0,
             comments: item.commentCount || 0,
