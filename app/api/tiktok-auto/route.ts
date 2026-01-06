@@ -2,21 +2,31 @@ import { NextResponse } from 'next/server';
 import { get } from '@vercel/edge-config';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function GET() {
   try {
-    // Primero solo intenta conectar
     const data = await get('tiktok-videos');
-    
+
+    if (!data) {
+      return NextResponse.json(
+        { error: 'No hay videos disponibles', videos: [], success: false },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({
+      videos: (data as any).videos || [],
       success: true,
-      hasData: !!data,
-      dataType: typeof data,
+      fetched_at: (data as any).fetched_at,
+      total_videos: (data as any).total_videos,
     });
+
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    }, { status: 500 });
+    console.error('Error leyendo Edge Config:', error);
+    return NextResponse.json(
+      { error: 'Error al obtener videos', videos: [], success: false },
+      { status: 500 }
+    );
   }
 }
