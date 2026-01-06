@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic'; //
+export const dynamic = 'force-dynamic';
 
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
 const APIFY_ACTOR_ID = 'GdWCkxBtKWOsKjdch';
@@ -13,7 +13,7 @@ export async function GET() {
       throw new Error('Missing environment variables');
     }
 
-    console.log(`üöÄ Ejecutando scraper semanal para @fruta.za...`);
+    console.log(`Ì∫Ä Ejecutando scraper semanal para @fruta.za...`);
 
     const response = await fetch(
       `https://api.apify.com/v2/acts/${APIFY_ACTOR_ID}/run-sync-get-dataset-items?token=${APIFY_API_TOKEN}`,
@@ -22,7 +22,7 @@ export async function GET() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profiles: ['@fruta.za'],
-          resultsPerPage: 20,
+          resultsPerPage: 15,
           shouldDownloadVideos: false,
           shouldDownloadCovers: false,
         }),
@@ -31,7 +31,7 @@ export async function GET() {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('‚ùå Error:', response.status, errorText);
+      console.error('‚ùå Error Apify:', response.status, errorText);
       throw new Error(`Apify error: ${response.status}`);
     }
 
@@ -39,7 +39,7 @@ export async function GET() {
     console.log(`‚úÖ Obtenidos ${results.length} videos`);
 
     const videosWithMetadata = await Promise.all(
-      results.slice(0, 20).map(async (item: any) => {
+      results.slice(0, 15).map(async (item: any) => {
         const videoId = item.webVideoUrl?.split('/video/')[1] || '';
         
         let oembedData = null;
@@ -79,23 +79,32 @@ export async function GET() {
       total_videos: videosWithMetadata.length,
     };
 
-    // Guardar en Edge Config v√≠a API
-    await fetch(`https://api.vercel.com/v1/edge-config/${EDGE_CONFIG_ID}/items`, {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${VERCEL_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        items: [
-          {
-            operation: 'upsert',
-            key: 'tiktok-videos',
-            value: dataToSave,
-          },
-        ],
-      }),
-    });
+    // Guardar en Edge Config v√≠a API de Vercel
+    const updateResponse = await fetch(
+      `https://api.vercel.com/v1/edge-config/${EDGE_CONFIG_ID}/items`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${VERCEL_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              operation: 'upsert',
+              key: 'tiktok-videos',
+              value: dataToSave,
+            },
+          ],
+        }),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      const errorText = await updateResponse.text();
+      console.error('‚ùå Error guardando en Edge Config:', updateResponse.status, errorText);
+      throw new Error(`Edge Config update error: ${updateResponse.status} - ${errorText}`);
+    }
 
     console.log(`‚úÖ Videos guardados en Edge Config`);
 
@@ -107,7 +116,7 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('üí• Error:', error);
+    console.error('Ì≤• Error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Unknown error', success: false },
       { status: 500 }
