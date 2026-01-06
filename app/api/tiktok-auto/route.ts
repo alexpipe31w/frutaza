@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
-const APIFY_ACTOR_ID = 'clockworks~tiktok-scraper';
+const APIFY_ACTOR_ID = 'clockworks/free-tiktok-scraper';
 
 export const revalidate = 21600; // 6 horas
 
