@@ -420,7 +420,7 @@ export function HeroSection() {
               ref={subtitleRef}
               className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             >
-              Mermeladas artesanales del Caquetá hechas con frutas amazónicas
+              Mermeladas del Caquetá hechas con frutas amazónicas
               100% naturales
             </p>
 
