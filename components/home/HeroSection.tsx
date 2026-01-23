@@ -416,13 +416,14 @@ export function HeroSection() {
               </div>
             </div>
 
-            <p
+            <h1
               ref={subtitleRef}
-              className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              className="text-xl md:text-2xl font-normal text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             >
               Mermeladas del Caquetá hechas con frutas amazónicas
               100% naturales
-            </p>
+            </h1>
+
 
             <div
               ref={buttonsRef}
