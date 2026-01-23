@@ -6,7 +6,8 @@ import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/layout/CartDrawer';
 import { ContactModalProvider } from '@/components/providers/ContactModalProvider';
 import { EfectosSelva } from '@/components/animations/EfectosSelva';
-import { TawkToChat } from './components/DialogflowChat';
+import ChatbotWidget from './components/ChatbotWidget';
+
 
 
 
@@ -46,7 +47,7 @@ export default function RootLayout({
         <Footer />
         <CartDrawer />
         <ContactModalProvider />
-        <TawkToChat />
+        <ChatbotWidget />
       </body>
     </html>
   );
