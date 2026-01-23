@@ -46,7 +46,7 @@ export function NavbarAnimated() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img
-              src="/images/logo-horizontal.png"
+              src="/images/logo-redondo.png"
               alt="Frutaza - Frutas Salvajes, Dulzura Natural"
               className="h-12 md:h-16 w-auto"
             />
