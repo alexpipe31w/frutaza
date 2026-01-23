@@ -1,7 +1,9 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 import { NextRequest, NextResponse } from 'next/server';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY!
+});
 
 const FRUTAZA_CONTEXT = `Eres el asistente virtual oficial de FRUTAZA, una marca del Caquetá, Colombia.
 
@@ -10,6 +12,7 @@ Más que mermeladas, somos el latido del corazón de Caquetá. Transformamos fru
 
 UBICACIÓN FÍSICA:
 San Vicente del Caguán, Caquetá - Carrera 6 #1-10 Barrio Hernández
+1 año de experiencia endulzando vidas con mermeladas artesanales amazónicas 🍯🌿
 
 NUESTRO PROPÓSITO:
 - Compartir la dulzura natural de la Amazonía
@@ -122,31 +125,46 @@ INSTRUCCIONES DE RESPUESTA:
 - Cuando pregunten sobre pedidos, menciona que pueden ordenar en www.frutaza.com
 - IMPORTANTE: Cuando el usuario mencione su ciudad o pueblo de Colombia, responde con entusiasmo: "¡Wow! Qué interesante lugar 😍 Claro que sí, [nombre de la ciudad] cuenta con nuestro servicio de envío para que te contagies de Frutaza 🍯🌿 ¿Te gustaría conocer nuestros productos?" (adapta el mensaje de forma natural y entusiasta)`;
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    const { message } = await request.json();
+    const { message, history = [] } = await req.json();
 
     if (!message) {
-      return NextResponse.json(
-        { error: 'Message is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Mensaje requerido' }, { status: 400 });
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    // Construir mensajes con formato de Groq
+    const messages = [
+      {
+        role: 'system',
+        content: FRUTAZA_CONTEXT
+      },
+      // Historial
+      ...history.map((msg: any) => ({
+        role: msg.role === 'user' ? 'user' : 'assistant',
+        content: msg.content
+      })),
+      // Mensaje actual
+      {
+        role: 'user',
+        content: message
+      }
+    ];
 
-    const prompt = `${FRUTAZA_CONTEXT}\n\nUsuario: ${message}\n\nAsistente Frutaza:`;
+    const completion = await groq.chat.completions.create({
+      messages: messages,
+      model: 'llama-3.3-70b-versatile', // Muy potente y rápido
+      temperature: 0.7,
+      max_tokens: 1024,
+    });
 
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
+    const response = completion.choices[0]?.message?.content || 'Error al generar respuesta';
 
-    return NextResponse.json({ response: text });
-
+    return NextResponse.json({ response });
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error en API de chat:', error);
     return NextResponse.json(
-      { error: 'Failed to generate response' },
+      { error: 'Error al procesar la solicitud' },
       { status: 500 }
     );
   }
