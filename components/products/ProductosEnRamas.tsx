@@ -1,7 +1,7 @@
 'use client';
 
 import { ProductoEnRama } from './ProductoEnRama';
-import type { Product } from '@/lib/shopify/types';
+import type { Product } from '@/lib/stockup/types'; // ← ÚNICO CAMBIO
 
 type Props = {
   products: Product[];
@@ -17,14 +17,12 @@ export function ProductosEnRamas({ products, onAddToCart }: Props) {
 
   return (
     <div className="relative py-12 md:py-20 px-2 md:px-4">
-      {/* Productos en ramas */}
       <div className="relative z-10 space-y-12 md:space-y-16">
         {rows.map((row, rowIndex) => (
           <div
             key={rowIndex}
             className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-8 items-center"
           >
-            {/* Columna izquierda */}
             {row[0] && (
               <div className="flex justify-center md:justify-end">
                 <ProductoEnRama
@@ -34,8 +32,6 @@ export function ProductosEnRamas({ products, onAddToCart }: Props) {
                 />
               </div>
             )}
-
-            {/* Columna derecha */}
             {row[1] && (
               <div className="flex justify-center md:justify-start">
                 <ProductoEnRama

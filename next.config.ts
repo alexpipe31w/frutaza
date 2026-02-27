@@ -27,10 +27,15 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
-      // 👉 Shopify
+      // Shopify
       {
         protocol: 'https',
         hostname: 'cdn.shopify.com',
+      },
+      // Cloudinary
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
       },
     ],
   },

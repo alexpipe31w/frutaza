@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
-import type { Product } from '@/lib/shopify/types';
+import type { Product } from '@/lib/stockup/types'; // ← CAMBIO
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -58,7 +58,7 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
             trigger: productoRef.current,
             start: 'top 90%',
             toggleActions: 'play none none none',
-            once: true, // Solo anima una vez
+            once: true,
           },
         }
       );
@@ -67,7 +67,10 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     return () => ctx.revert();
   }, [isMobile]);
 
+  // ── CAMBIO: images.edges[0].node.url → images.edges[0].node (ya es Image)
   const imagen = product.images.edges[0]?.node;
+
+  // ── CAMBIO: precio viene como string en Money.amount (igual que Shopify gracias al adapter)
   const precio = selectedVariant
     ? selectedVariant.price
     : product.priceRange.minVariantPrice;
@@ -121,11 +124,12 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
         {/* Contenido expandido */}
         {isOpen && (
           <div className="mt-2">
+            {/* ── CAMBIO: product.title (mapeado desde name en el adapter) */}
             <h3 className="text-2xl font-display font-bold text-frutaza-verde-oscuro mb-2">
               {product.title}
             </h3>
 
-            {/* Descripción */}
+            {/* Descripción — igual, description sigue siendo string */}
             <div className="text-gray-600 text-sm mb-4 space-y-3">
               {product.description
                 .split(/(\*[^*]+\*)/g)
@@ -153,9 +157,11 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                 <p className="text-sm text-gray-600 mb-2">Presentación:</p>
                 <div className="flex flex-wrap gap-2">
                   {variants.map(({ node }) => {
+                    // ── CAMBIO: selectedOptions viene del adapter que convierte
+                    // attributes JSON → [{ name, value }] — misma forma que Shopify
                     const options = node.selectedOptions || [];
                     const sizeOption = options.find((opt) =>
-                      ['size', 'peso', 'presentación', 'presentation'].includes(
+                      ['size', 'peso', 'presentación', 'presentation', 'capacidad'].includes(
                         opt.name.toLowerCase()
                       )
                     );
@@ -184,7 +190,7 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
               </div>
             )}
 
-            {/* Precio + botón */}
+            {/* Precio + botón — precio.amount sigue siendo string gracias al adapter */}
             <div className="flex items-center justify-between">
               <span className="text-3xl font-bold text-frutaza-amarillo">
                 ${parseFloat(precio.amount).toLocaleString('es-CO')}

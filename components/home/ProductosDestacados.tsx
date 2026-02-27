@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { ProductosEnRamas } from '@/components/products/ProductosEnRamas';
-import type { Product } from '@/lib/shopify/types';
-import shopifyFetch from '@/lib/shopify/client';
-import { GET_FEATURED_PRODUCTS_QUERY } from '@/lib/shopify/queries';
+import type { Product } from '@/lib/stockup/types'; // ← CAMBIO
 import { useCart } from '@/hooks/useCart';
 
 interface CapaSelvaConfig {
@@ -15,22 +13,10 @@ interface CapaSelvaConfig {
   objectPosition?: string;
 }
 
-// ✨ CONFIGURACIÓN DE LA CAPA DECORATIVA AL FRENTE
 const capaConfig: CapaSelvaConfig = {
   opacity: 1,
   scale: 0.6,
   objectPosition: 'bottom center',
-};
-
-type FeaturedResponse = {
-  collection: {
-    id: string;
-    handle: string;
-    title: string;
-    products: {
-      edges: Array<{ node: Product }>;
-    };
-  } | null;
 };
 
 export function ProductosDestacados() {
@@ -41,21 +27,17 @@ export function ProductosDestacados() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const data = await shopifyFetch<FeaturedResponse>({
-          query: GET_FEATURED_PRODUCTS_QUERY,
-          variables: {
-            handle: 'productos-destacados', // 👈 handle de la colección en Shopify
-            first: 10,
-          },
-        });
+        // ── CAMBIO: llama al Route Handler interno en lugar de Shopify directamente.
+        // featured=true trae los productos del tenant (puedes filtrar por categorySlug si creas
+        // una categoría "destacados" en StockUp, por ahora trae los primeros 10 activos).
+        const res = await fetch('/api/stockup/products?featured=true&limit=10');
+        const json = await res.json();
 
-        const nodes = data.collection
-          ? data.collection.products.edges.map(({ node }) => node)
-          : [];
-
-        setProducts(nodes);
+        if (json.success) {
+          setProducts(json.data);
+        }
       } catch (error) {
-        console.error('Error fetching featured products', error);
+        console.error('[ProductosDestacados] Error fetching products:', error);
       } finally {
         setLoading(false);
       }
@@ -70,7 +52,6 @@ export function ProductosDestacados() {
 
   return (
     <section className="relative py-20 bg-frutaza-crema overflow-visible">
-      {/* ========== CAPA 2: CONTENIDO (ATRÁS) ========== */}
       <div className="relative z-[1]">
         {/* Header */}
         <div className="container mx-auto px-4 text-center mb-16">
@@ -83,7 +64,7 @@ export function ProductosDestacados() {
           <div className="w-24 h-1 bg-frutaza-amarillo mx-auto rounded-full" />
         </div>
 
-        {/* Productos en ramas */}
+        {/* Productos */}
         {loading ? (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-frutaza-verde-vivo" />

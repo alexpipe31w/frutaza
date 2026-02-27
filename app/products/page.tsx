@@ -4,10 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ProductosGrid } from '@/components/products/ProductosGrid';
-import type { Product } from '@/lib/shopify/types';
-import shopifyFetch from '@/lib/shopify/client'; // 👈 añadido
+import type { Product } from '@/lib/stockup/types'; // ← CAMBIO
 
-// Hojas disponibles
+// Hojas disponibles — sin cambios
 const HOJAS_IMAGES = [
   '/images/vegetacion/hoja1.svg',
   '/images/vegetacion/hoja2.svg',
@@ -27,82 +26,26 @@ interface HojaData {
   rotationStart: number;
 }
 
-// 👇 query para traer productos (solo lo necesario para la grid)
-const GET_PRODUCTS = `
-  query getProducts {
-    products(first: 20) {
-      edges {
-        node {
-          id
-          title
-          handle
-          description
-          availableForSale
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-                width
-                height
-              }
-            }
-          }
-          variants(first: 5) {
-            edges {
-              node {
-                id
-                title
-                availableForSale
-                price {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-
-type ProductsResponse = {
-  products: {
-    edges: Array<{
-      node: Product;
-    }>;
-  };
-};
-
 export default function ProductsPage() {
   const [mounted, setMounted] = useState(false);
   const [hojasData, setHojasData] = useState<HojaData[]>([]);
   const hojasContainerRef = useRef<HTMLDivElement>(null);
 
-  // ✅ estado real de productos
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
 
-  // Fetch productos desde Shopify
+  // ── CAMBIO: fetch al Route Handler interno en lugar de Shopify directamente
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await shopifyFetch<ProductsResponse>({
-          query: GET_PRODUCTS,
-        });
+        const res = await fetch('/api/stockup/products?limit=20');
+        const json = await res.json();
 
-        const nodes = data.products.edges.map(({ node }) => node);
-        setProducts(nodes);
+        if (json.success) {
+          setProducts(json.data);
+        }
       } catch (error) {
-        console.error('Error fetching products from Shopify:', error);
+        console.error('[ProductsPage] Error fetching products:', error);
       } finally {
         setLoadingProducts(false);
       }
@@ -111,7 +54,7 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  // Generar hojas al montar
+  // Generar hojas al montar — sin cambios
   useEffect(() => {
     setHojasData(
       Array.from({ length: 15 }).map(() => ({
@@ -125,7 +68,7 @@ export default function ProductsPage() {
     setMounted(true);
   }, []);
 
-  // Animaciones GSAP
+  // Animaciones GSAP — sin cambios
   useEffect(() => {
     if (!mounted) return;
 
@@ -136,7 +79,6 @@ export default function ProductsPage() {
         const duration = gsap.utils.random(12, 20);
         const swingAmount = gsap.utils.random(60, 120);
 
-        // Caída
         gsap.to(hoja, {
           y: '120vh',
           duration,
@@ -145,7 +87,6 @@ export default function ProductsPage() {
           ease: 'none',
         });
 
-        // Balanceo horizontal
         gsap.to(hoja, {
           x: `+=${swingAmount}`,
           duration: gsap.utils.random(2, 4),
@@ -155,7 +96,6 @@ export default function ProductsPage() {
           delay: index * 0.3,
         });
 
-        // Rotación
         gsap.to(hoja, {
           rotation: '+=30',
           duration: gsap.utils.random(2.5, 4.5),
@@ -164,7 +104,6 @@ export default function ProductsPage() {
           ease: 'sine.inOut',
         });
 
-        // Rotación 3D
         gsap.to(hoja, {
           rotationY: 180,
           duration: gsap.utils.random(3, 5),
@@ -180,7 +119,7 @@ export default function ProductsPage() {
 
   return (
     <div className="relative min-h-screen pt-32 pb-20 bg-frutaza-crema overflow-hidden">
-      {/* ========== HOJAS CAYENDO ========== */}
+      {/* Hojas cayendo — sin cambios */}
       {mounted && (
         <div
           ref={hojasContainerRef}
@@ -213,9 +152,8 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {/* ========== CONTENIDO ========== */}
+      {/* Contenido — sin cambios */}
       <div className="relative z-10 container mx-auto px-4">
-        {/* Header */}
         <div className="text-center mb-16">
           <img
             src="/images/logo-redondo.png"
@@ -230,7 +168,6 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        {/* Productos */}
         {loadingProducts ? (
           <div className="text-center py-20">
             <p className="text-xl text-gray-600">Cargando productos...</p>

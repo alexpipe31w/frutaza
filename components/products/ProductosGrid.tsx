@@ -1,7 +1,7 @@
 'use client';
 
 import { ProductosEnRamas } from './ProductosEnRamas';
-import type { Product } from '@/lib/shopify/types';
+import type { Product } from '@/lib/stockup/types'; // ← ÚNICO CAMBIO
 import { useCart } from '@/hooks/useCart';
 
 type Props = {

@@ -6,12 +6,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CartPage() {
-  const { cart, updateLine, removeLine } = useCart(); // 👈 usar acciones
+  const { cart, updateLine, removeLine } = useCart();
 
+  // ── CAMBIO: subtotalAmount.amount sigue siendo string Money — sin cambios
   const subtotal = cart?.cost.subtotalAmount
     ? parseFloat(cart.cost.subtotalAmount.amount)
     : 0;
 
+  // Carrito vacío
   if (!cart || cart.lines.edges.length === 0) {
     return (
       <div className="min-h-screen pt-32 pb-20">
@@ -33,6 +35,13 @@ export default function CartPage() {
     );
   }
 
+  // ── CAMBIO: checkoutUrl construida por el adapter → /checkout/frutaza/[productId]
+  const handleCheckout = () => {
+    if (cart.checkoutUrl) {
+      window.location.href = cart.checkoutUrl;
+    }
+  };
+
   return (
     <div className="min-h-screen pt-32 pb-20 bg-frutaza-crema">
       <div className="container mx-auto px-4">
@@ -44,13 +53,11 @@ export default function CartPage() {
           {/* Productos */}
           <div className="lg:col-span-2 space-y-4">
             {cart.lines.edges.map(({ node: line }) => (
-              <div
-                key={line.id}
-                className="bg-white rounded-xl shadow-lg p-6 flex gap-6"
-              >
+              <div key={line.id} className="bg-white rounded-xl shadow-lg p-6 flex gap-6">
                 {/* Imagen */}
                 <div className="relative w-32 h-32 rounded-lg overflow-hidden flex-shrink-0">
-                  {line.merchandise.product.featuredImage ? (
+                  {/* ── CAMBIO: featuredImage.url viene del adapter */}
+                  {line.merchandise.product.featuredImage?.url ? (
                     <Image
                       src={line.merchandise.product.featuredImage.url}
                       alt={line.merchandise.product.title}
@@ -64,35 +71,30 @@ export default function CartPage() {
 
                 {/* Info */}
                 <div className="flex-1">
+                  {/* ── CAMBIO: product.title mapeado desde name */}
                   <h3 className="text-xl font-display font-bold text-frutaza-verde-oscuro mb-2">
                     {line.merchandise.product.title}
                   </h3>
+                  {/* ── CAMBIO: merchandise.title = variant.name o 'Único' */}
                   <p className="text-gray-600 mb-4">{line.merchandise.title}</p>
 
                   <div className="flex items-center justify-between gap-4">
-                    {/* Controles de cantidad */}
+                    {/* Controles cantidad */}
                     <div className="flex items-center gap-2">
                       <button
                         className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-lg font-bold text-frutaza-verde-oscuro disabled:opacity-40"
                         disabled={line.quantity <= 1}
-                        onClick={() =>
-                          updateLine(line.id, line.quantity - 1)
-                        }
+                        onClick={() => updateLine(line.id, line.quantity - 1)}
                       >
                         −
                       </button>
-                      <span className="min-w-[2rem] text-center">
-                        {line.quantity}
-                      </span>
+                      <span className="min-w-[2rem] text-center">{line.quantity}</span>
                       <button
                         className="w-8 h-8 rounded-full bg-frutaza-verde-vivo text-white flex items-center justify-center text-lg font-bold hover:bg-frutaza-verde-oscuro"
-                        onClick={() =>
-                          updateLine(line.id, line.quantity + 1)
-                        }
+                        onClick={() => updateLine(line.id, line.quantity + 1)}
                       >
                         +
                       </button>
-
                       <button
                         className="ml-4 text-sm text-red-500 hover:underline"
                         onClick={() => removeLine(line.id)}
@@ -101,11 +103,9 @@ export default function CartPage() {
                       </button>
                     </div>
 
+                    {/* ── CAMBIO: totalAmount.amount sigue siendo string — sin cambios en JSX */}
                     <span className="text-2xl font-bold text-frutaza-verde-oscuro">
-                      $
-                      {parseFloat(
-                        line.cost.totalAmount.amount
-                      ).toLocaleString('es-CO')}
+                      ${parseFloat(line.cost.totalAmount.amount).toLocaleString('es-CO')}
                     </span>
                   </div>
                 </div>
@@ -134,18 +134,16 @@ export default function CartPage() {
                   <span>${subtotal.toLocaleString('es-CO')} COP</span>
                 </div>
               </div>
-                  <Button
-                    size="lg"
-                    className="w-full"
-                    disabled={!cart.checkoutUrl}
-                    onClick={() => {
-                      if (cart.checkoutUrl) {
-                        window.location.href = cart.checkoutUrl;
-                      }
-                    }}
-                  >
-                    Pagar
-                  </Button>
+
+              <Button
+                size="lg"
+                className="w-full"
+                disabled={!cart.checkoutUrl}
+                onClick={handleCheckout}
+              >
+                Pagar
+              </Button>
+
               <Link href="/products" className="block mt-4">
                 <Button size="md" variant="outline" className="w-full">
                   Seguir Comprando
