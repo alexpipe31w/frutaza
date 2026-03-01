@@ -13,10 +13,10 @@ if (typeof window !== 'undefined') {
 type Props = {
   product: Product;
   index: number;
-  onAddToCart: (variantId: string, quantity: number, price: number) => void;
+  // FIX: nueva firma con productId explícito y variantId nullable
+  onAddToCart: (productId: string, variantId: string | null, quantity: number, price: number) => void;
 };
 
-// Normaliza strings para comparación: minúsculas + sin tildes
 function normalize(str: string): string {
   return str
     .toLowerCase()
@@ -39,7 +39,6 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     variants[0]?.node.id ?? ''
   );
 
-  // Sincronizar selectedVariantId si cambian las variantes (ej: hydration)
   useEffect(() => {
     if (variants.length > 0 && !variants.find((v) => v.node.id === selectedVariantId)) {
       setSelectedVariantId(variants[0].node.id);
@@ -84,17 +83,27 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     return () => ctx.revert();
   }, [isMobile]);
 
-  const imagen = product.images.edges[0]?.node;
+
+  // Imagen dinámica: usa imagen de la variante si existe, sino la del producto
+  const imagenUrl = useMemo(() => {
+    if (selectedVariant?.image) {
+      return { url: selectedVariant.image, altText: selectedVariant.title };
+    }
+    return product.images.edges[0]?.node;
+  }, [selectedVariant, product.images]);
+
   const precio = selectedVariant
     ? selectedVariant.price
     : product.priceRange.minVariantPrice;
 
   const precioNumerico = parseFloat(precio.amount);
 
-  // FIX BUG 1: detectar si hay variantes REALES (más de 1, o la única no es "default")
   const hasRealVariants =
     variants.length > 1 ||
     (variants.length === 1 && variants[0].node.id !== `${product.id}-default`);
+
+  // FIX: determinar si la variante seleccionada es "default" (producto sin variantes reales)
+  const isDefaultVariant = selectedVariantId === `${product.id}-default`;
 
   return (
     <div className="relative flex items-center justify-center px-4 py-10">
@@ -124,11 +133,11 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
             </div>
           )}
 
-          {imagen ? (
+          {imagenUrl ? (
             <div className="absolute bottom-2 z-10 w-[60%] max-w-sm">
               <Image
-                src={imagen.url}
-                alt={imagen.altText || product.title}
+                src={imagenUrl.url}
+                alt={imagenUrl.altText || product.title}
                 width={600}
                 height={600}
                 className="w-full h-auto object-contain"
@@ -169,15 +178,13 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                 })}
             </div>
 
-            {/* FIX BUG 1: Selector de variantes — aparece si hay variantes reales */}
+            {/* Selector de variantes */}
             {hasRealVariants && (
               <div className="mb-4">
                 <p className="text-sm text-gray-600 mb-2">Presentación:</p>
                 <div className="flex flex-wrap gap-2">
                   {variants.map(({ node }) => {
                     const options = node.selectedOptions || [];
-
-                    // FIX: comparación normalizada (sin tildes, case-insensitive)
                     const sizeOption = options.find((opt) =>
                       SIZE_OPTION_NAMES.includes(normalize(opt.name))
                     );
@@ -217,7 +224,13 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                 onClick={(e) => {
                   e.stopPropagation();
                   if (selectedVariant) {
-                    onAddToCart(selectedVariant.id, 1, precioNumerico);
+                    // FIX: pasar productId explícito + variantId null si es default
+                    onAddToCart(
+                      product.id,
+                      isDefaultVariant ? null : selectedVariant.id,
+                      1,
+                      precioNumerico
+                    );
                   }
                 }}
                 disabled={!selectedVariant}

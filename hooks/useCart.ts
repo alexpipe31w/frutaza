@@ -4,8 +4,6 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Cart } from '@/lib/stockup/types';
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
 function getOrCreateSessionId(): string {
   if (typeof window === 'undefined') return '';
   const existing = localStorage.getItem('frutaza-session-id');
@@ -38,8 +36,6 @@ async function cartFetch(body: Record<string, unknown>): Promise<Cart> {
   return json.data as Cart;
 }
 
-// ─── Store ───────────────────────────────────────────────────────────────────
-
 type CartStore = {
   cart: Cart | null;
   isOpen: boolean;
@@ -47,8 +43,8 @@ type CartStore = {
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
-  // addToCart recibe variantId (puede ser "productId-default") y el precio unitario
-  addToCart: (variantId: string, quantity?: number, price?: number) => Promise<void>;
+  // FIX: ahora recibe productId explícito además de variantId
+  addToCart: (productId: string, variantId: string | null, quantity?: number, price?: number) => Promise<void>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
 };
@@ -64,29 +60,19 @@ export const useCart = create<CartStore>()(
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
 
-      // ── Agregar al carrito ──────────────────────────────────────────────
-      // variantId viene del adapter: UUID real de variante, o "${productId}-default"
-      // price viene del componente ProductoEnRama (precio de la variante seleccionada)
-      addToCart: async (variantId, quantity = 1, price) => {
+      // FIX: productId siempre llega explícito desde el componente
+      // variantId es null si es producto sin variantes (default)
+      addToCart: async (productId, variantId, quantity = 1, price = 0) => {
         const sessionId = getOrCreateSessionId();
 
         try {
-          const isDefaultVariant = variantId.endsWith('-default');
-          const productId = isDefaultVariant
-            ? variantId.replace('-default', '')
-            : null;
-
-          // Si no se pasa price, intentar obtenerlo del carrito actual
-          // (no debería pasar si ProductoEnRama lo pasa correctamente)
-          const unitPrice = price ?? 0;
-
           const cart = await cartFetch({
             action: 'add',
             sessionId,
-            productId: productId || undefined,
-            variantId: isDefaultVariant ? undefined : variantId,
+            productId,
+            variantId: variantId || null,
             quantity,
-            price: unitPrice,
+            price,
           });
 
           set({ cart, isOpen: true });
@@ -95,8 +81,6 @@ export const useCart = create<CartStore>()(
         }
       },
 
-      // ── Actualizar cantidad ─────────────────────────────────────────────
-      // StockUp necesita cartId además de cartItemId
       updateLine: async (lineId, quantity) => {
         const sessionId = getOrCreateSessionId();
         const cartId = get().cart?.id;
@@ -116,7 +100,6 @@ export const useCart = create<CartStore>()(
         }
       },
 
-      // ── Eliminar del carrito ────────────────────────────────────────────
       removeLine: async (lineId) => {
         const sessionId = getOrCreateSessionId();
         const cartId = get().cart?.id;

@@ -91,6 +91,7 @@ export type ProductVariant = {
   }>;
   price: Money;
   compareAtPrice?: Money;
+  image?: string | null;
 };
 
 export type Product = {

@@ -11,9 +11,9 @@ type Props = {
 export function ProductosGrid({ products }: Props) {
   const { addToCart } = useCart();
 
-  // ── CAMBIO: recibe price y lo pasa a addToCart
-  const handleAddToCart = (variantId: string, quantity: number, price: number) => {
-    addToCart(variantId, quantity, price);
+  // FIX: nueva firma recibe productId explícito
+  const handleAddToCart = (productId: string, variantId: string | null, quantity: number, price: number) => {
+    addToCart(productId, variantId, quantity, price);
   };
 
   return <ProductosEnRamas products={products} onAddToCart={handleAddToCart} />;

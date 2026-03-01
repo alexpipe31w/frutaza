@@ -12,6 +12,7 @@ const HEADERS = {
 };
 
 // ─── Adaptador: respuesta pública del carrito → Cart compatible con Shopify ──
+// FIX: ahora recibe sessionId (el frutaza-session-id) para construir checkoutUrl correcta
 function adaptCart(data: any, sessionId?: string) {
   if (!data) return null;
 
@@ -53,12 +54,18 @@ function adaptCart(data: any, sessionId?: string) {
 
   const subtotal = Number(data.totalValue ?? 0);
   const firstItem = data.items?.[0];
-  // FIX: incluir cartSessionId para que StockUp cargue todos los items del carrito
-  const checkoutUrl = firstItem && sessionId
-    ? `${stockupConfig.apiUrl}/checkout/${stockupConfig.tenantSlug}/${firstItem.productId}?cartSessionId=${sessionId}`
-    : firstItem
-    ? `${stockupConfig.apiUrl}/checkout/${stockupConfig.tenantSlug}/${firstItem.productId}`
-    : '';
+
+  // FIX PRINCIPAL: usar data.sessionId (el frutaza-session-id guardado en StockUp)
+  // como cartSessionId. El parámetro sessionId que llega aquí ES ese valor
+  // porque el POST lo manda desde useCart → cartFetch → body.sessionId
+  const cartSessionId = data.sessionId || sessionId;
+
+  const checkoutUrl =
+    firstItem && cartSessionId
+      ? `${stockupConfig.apiUrl}/checkout/${stockupConfig.tenantSlug}/${firstItem.productId}?cartSessionId=${cartSessionId}`
+      : firstItem
+      ? `${stockupConfig.apiUrl}/checkout/${stockupConfig.tenantSlug}/${firstItem.productId}`
+      : '';
 
   return {
     id: data.id,
@@ -93,7 +100,8 @@ export async function GET(request: NextRequest) {
       throw new Error(json.error || `Error ${res.status}`);
     }
 
-    return NextResponse.json({ success: true, data: adaptCart(json.data) });
+    // FIX: pasar sessionId para que adaptCart construya checkoutUrl correcta
+    return NextResponse.json({ success: true, data: adaptCart(json.data, sessionId) });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Error desconocido';
     return NextResponse.json({ success: false, error: message }, { status: 500 });
@@ -206,7 +214,8 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    return NextResponse.json({ success: true, data: adaptCart(json.data) });
+    // FIX: pasar sessionId para que adaptCart construya checkoutUrl correcta
+    return NextResponse.json({ success: true, data: adaptCart(json.data, sessionId) });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Error desconocido';
     console.error('[/api/stockup/cart POST]', message);

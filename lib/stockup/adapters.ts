@@ -38,13 +38,6 @@ function toImage(url: string | null | undefined, altText?: string | null): Image
   };
 }
 
-/**
- * FIX 1 — VARIANTES:
- * Las variantes tienen attributes: {} vacío.
- * Extraemos la etiqueta del nombre de la variante.
- * "✨ MERMELADA DE COCONA -180GR✨" → "180GR"
- * "✨ MERMELADA DE COCONA-50GR ✨"  → "50GR"
- */
 function extractVariantLabel(name: string): string {
   const match = name.match(/[-\s](\d+\s*(?:GR|G|ML|KG|L))\s*[✨\s]*$/i);
   if (match) return match[1].toUpperCase();
@@ -56,7 +49,6 @@ function extractVariantLabel(name: string): string {
 export function adaptVariant(v: StockUpVariant, productPrice: number): ProductVariant {
   const attributes = v.attributes || {};
 
-  // FIX 1: si attributes está vacío, usar el peso extraído del nombre
   const selectedOptions =
     Object.keys(attributes).length > 0
       ? Object.entries(attributes).map(([name, value]) => ({
@@ -67,17 +59,17 @@ export function adaptVariant(v: StockUpVariant, productPrice: number): ProductVa
 
   return {
     id: v.id,
-    title: extractVariantLabel(v.name), // "180GR" o "50GR" en lugar del nombre completo
+    title: extractVariantLabel(v.name),
     availableForSale: v.stock > 0,
     selectedOptions,
     price: toMoney(v.price ?? productPrice),
+    image: v.image || null,
   };
 }
 
 // ─── Producto ────────────────────────────────────────────────────────────────
 
 export function adaptProduct(p: StockUpProduct): Product {
-  // Imágenes: array de strings URL → edges con node Image
   const imageEdges = (p.images || []).map((url) => ({
     node: toImage(url, p.name),
   }));
@@ -86,13 +78,11 @@ export function adaptProduct(p: StockUpProduct): Product {
     imageEdges.push({ node: toImage(null, p.name) });
   }
 
-  // Variantes: la API devuelve null cuando no hay variantes reales
   const rawVariants = Array.isArray(p.variants) ? p.variants : [];
   const variantEdges = rawVariants
-    .filter((v) => v.isActive)
+    .filter((v) => v.isActive !== false) // defensivo: incluye si isActive es true o undefined
     .map((v) => ({ node: adaptVariant(v, p.price) }));
 
-  // Sin variantes reales → crear variante "default" con el precio base del producto
   if (variantEdges.length === 0) {
     variantEdges.push({
       node: {
@@ -141,7 +131,6 @@ function adaptCartItem(item: StockUpCartItem): CartLine {
     quantity: item.quantity,
     merchandise: {
       id: item.variantId || item.productId,
-      // FIX: mostrar label limpio en el carrito también
       title: item.variant?.name ? extractVariantLabel(item.variant.name) : 'Único',
       product: {
         title: item.product?.name || '',
@@ -159,8 +148,6 @@ export function adaptCart(
   stockupCart: StockUpCart,
   tenantSlug: string = stockupConfig.tenantSlug
 ): Cart {
-  console.log('[adaptCart] items:', JSON.stringify(stockupCart.items?.slice(0,1)));
-  console.log('[adaptCart] sessionId:', stockupCart.sessionId);
   const lines = (stockupCart.items || []).map(adaptCartItem);
 
   const subtotal = lines.reduce(
@@ -169,9 +156,14 @@ export function adaptCart(
   );
 
   const firstProductId = stockupCart.items?.[0]?.productId || '';
-  // Pasamos sessionId como query param para que StockUp cargue todos los items del carrito
-  const checkoutUrl = firstProductId
-    ? `${stockupConfig.apiUrl}/checkout/${tenantSlug}/${firstProductId}?sessionId=${stockupCart.id}&cartSessionId=${stockupCart.sessionId}`
+
+  // FIX: usar solo cartSessionId=stockupCart.sessionId (el frutaza-session-id).
+  // NO incluir sessionId=stockupCart.id (el UUID interno del carrito en BD),
+  // porque el CheckoutPage de StockUp solo lee cartSessionId en searchParams.
+  const checkoutUrl = firstProductId && stockupCart.sessionId
+    ? `${stockupConfig.apiUrl}/checkout/${tenantSlug}/${firstProductId}?cartSessionId=${stockupCart.sessionId}`
+    : firstProductId
+    ? `${stockupConfig.apiUrl}/checkout/${tenantSlug}/${firstProductId}`
     : '';
 
   return {

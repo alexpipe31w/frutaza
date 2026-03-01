@@ -5,7 +5,8 @@ import type { Product } from '@/lib/stockup/types';
 
 type Props = {
   products: Product[];
-  onAddToCart: (variantId: string, quantity: number, price: number) => void;
+  // FIX: nueva firma con productId explícito
+  onAddToCart: (productId: string, variantId: string | null, quantity: number, price: number) => void;
 };
 
 export function ProductosEnRamas({ products, onAddToCart }: Props) {
