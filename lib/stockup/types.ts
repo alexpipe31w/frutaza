@@ -1,6 +1,4 @@
 // lib/stockup/types.ts
-// Mantiene la misma forma que lib/shopify/types.ts para no romper componentes.
-// Los adaptadores (toShopifyProduct, etc.) convierten la respuesta de StockUp a estos tipos.
 
 // ─── Tipos internos de StockUp (lo que devuelve la API) ───────────────────────
 
@@ -8,9 +6,9 @@ export type StockUpVariant = {
   id: string;
   name: string;
   sku: string;
-  price: number | null;       // Decimal como número
+  price: number | null;
   stock: number;
-  attributes: Record<string, string>; // { "color": "Verde", "peso": "250g" }
+  attributes: Record<string, string>;
   image: string | null;
   weight: number | null;
   isActive: boolean;
@@ -20,10 +18,10 @@ export type StockUpProduct = {
   id: string;
   name: string;
   description: string | null;
-  price: number;              // Decimal como número
+  price: number;
   sku: string | null;
   stock: number;
-  images: string[];           // Array de URLs directas
+  images: string[];
   weight: number | null;
   shippingEnabled: boolean;
   shippingStandard: number;
@@ -38,11 +36,11 @@ export type StockUpProduct = {
   } | null;
   createdAt: string;
   updatedAt: string;
-  checkout_url: string;       // Ya viene construida desde la API de StockUp
+  checkout_url: string;
 };
 
 export type StockUpCartItem = {
-  id: string;                 // ID del CartItem
+  id: string;
   productId: string;
   variantId: string | null;
   quantity: number;
@@ -51,15 +49,18 @@ export type StockUpCartItem = {
     id: string;
     name: string;
     images: string[];
-  };
+    price: number;
+  } | null;
   variant: {
     id: string;
     name: string;
+    image: string | null;   // ← FIX: agregado
+    price: number | null;   // ← FIX: agregado
   } | null;
 };
 
 export type StockUpCart = {
-  id: string;                 // ID del Cart
+  id: string;
   sessionId: string;
   items: StockUpCartItem[];
   totalValue: number;
@@ -67,7 +68,6 @@ export type StockUpCart = {
 };
 
 // ─── Tipos compatibles con Shopify (lo que usan los componentes) ──────────────
-// Mantenemos los mismos nombres/formas para no cambiar los componentes.
 
 export type Money = {
   amount: string;
@@ -95,12 +95,12 @@ export type ProductVariant = {
 
 export type Product = {
   id: string;
-  handle: string;             // En StockUp = id (no hay handle/slug en productos)
-  title: string;              // Mapeado desde name
+  handle: string;
+  title: string;
   description: string;
-  descriptionHtml: string;    // Igual que description (StockUp no tiene HTML)
-  availableForSale: boolean;  // stock > 0
-  tags: string[];             // Siempre [] (StockUp no tiene tags)
+  descriptionHtml: string;
+  availableForSale: boolean;
+  tags: string[];
   priceRange: {
     minVariantPrice: Money;
     maxVariantPrice: Money;
@@ -148,7 +148,7 @@ export type CartLine = {
 
 export type Cart = {
   id: string;
-  checkoutUrl: string;        // Construida como /checkout/frutaza/[productId]
+  checkoutUrl: string;
   totalQuantity: number;
   cost: {
     subtotalAmount: Money;

@@ -6,7 +6,6 @@ import type { Cart } from '@/lib/stockup/types';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Genera un sessionId único si no existe en localStorage */
 function getOrCreateSessionId(): string {
   if (typeof window === 'undefined') return '';
   const existing = localStorage.getItem('frutaza-session-id');
@@ -23,7 +22,14 @@ async function cartFetch(body: Record<string, unknown>): Promise<Cart> {
     body: JSON.stringify(body),
   });
 
-  const json = await res.json();
+  const text = await res.text();
+
+  let json: any;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(`Respuesta inválida del carrito: ${text.slice(0, 100)}`);
+  }
 
   if (!res.ok || !json.success) {
     throw new Error(json.error || 'Error en operación del carrito');
@@ -37,22 +43,19 @@ async function cartFetch(body: Record<string, unknown>): Promise<Cart> {
 type CartStore = {
   cart: Cart | null;
   isOpen: boolean;
-
-  // UI
   setCart: (cart: Cart | null) => void;
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
-
-  // Operaciones — misma firma que antes para no romper componentes
-  addToCart: (variantId: string, quantity?: number) => Promise<void>;
+  // addToCart recibe variantId (puede ser "productId-default") y el precio unitario
+  addToCart: (variantId: string, quantity?: number, price?: number) => Promise<void>;
   updateLine: (lineId: string, quantity: number) => Promise<void>;
   removeLine: (lineId: string) => Promise<void>;
 };
 
 export const useCart = create<CartStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       cart: null,
       isOpen: false,
 
@@ -62,28 +65,28 @@ export const useCart = create<CartStore>()(
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
 
       // ── Agregar al carrito ──────────────────────────────────────────────
-      // Firma idéntica a Shopify: addToCart(variantId, quantity)
-      // En StockUp: variantId puede ser el ID de variante O el ID de producto
-      // (cuando el producto no tiene variantes, usamos el productId directamente)
-      addToCart: async (variantId, quantity = 1) => {
+      // variantId viene del adapter: UUID real de variante, o "${productId}-default"
+      // price viene del componente ProductoEnRama (precio de la variante seleccionada)
+      addToCart: async (variantId, quantity = 1, price) => {
         const sessionId = getOrCreateSessionId();
 
         try {
-          // variantId puede venir como "productId-default" (variante sintética del adapter)
-          // o como un UUID real de variante.
-          // Si termina en "-default", es un producto sin variantes reales.
           const isDefaultVariant = variantId.endsWith('-default');
           const productId = isDefaultVariant
             ? variantId.replace('-default', '')
             : null;
 
+          // Si no se pasa price, intentar obtenerlo del carrito actual
+          // (no debería pasar si ProductoEnRama lo pasa correctamente)
+          const unitPrice = price ?? 0;
+
           const cart = await cartFetch({
             action: 'add',
             sessionId,
-            // Si es variante real, pasar variantId. Si es default, pasar solo productId.
             productId: productId || undefined,
             variantId: isDefaultVariant ? undefined : variantId,
             quantity,
+            price: unitPrice,
           });
 
           set({ cart, isOpen: true });
@@ -93,15 +96,17 @@ export const useCart = create<CartStore>()(
       },
 
       // ── Actualizar cantidad ─────────────────────────────────────────────
-      // lineId = cartItem.id (equivalente al line.id de Shopify)
+      // StockUp necesita cartId además de cartItemId
       updateLine: async (lineId, quantity) => {
         const sessionId = getOrCreateSessionId();
+        const cartId = get().cart?.id;
 
         try {
           const cart = await cartFetch({
             action: 'update',
             sessionId,
             cartItemId: lineId,
+            cartId,
             quantity,
           });
 
@@ -112,15 +117,16 @@ export const useCart = create<CartStore>()(
       },
 
       // ── Eliminar del carrito ────────────────────────────────────────────
-      // lineId = cartItem.id
       removeLine: async (lineId) => {
         const sessionId = getOrCreateSessionId();
+        const cartId = get().cart?.id;
 
         try {
           const cart = await cartFetch({
             action: 'remove',
             sessionId,
             cartItemId: lineId,
+            cartId,
           });
 
           set({ cart });
@@ -130,8 +136,8 @@ export const useCart = create<CartStore>()(
       },
     }),
     {
-      name: 'frutaza-cart',                          // misma key de localStorage que antes
-      partialize: (state) => ({ cart: state.cart }), // solo persistir el carrito
+      name: 'frutaza-cart',
+      partialize: (state) => ({ cart: state.cart }),
     }
   )
 );

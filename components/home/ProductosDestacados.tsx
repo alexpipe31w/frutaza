@@ -4,20 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { ProductosEnRamas } from '@/components/products/ProductosEnRamas';
-import type { Product } from '@/lib/stockup/types'; // ← CAMBIO
+import type { Product } from '@/lib/stockup/types';
 import { useCart } from '@/hooks/useCart';
-
-interface CapaSelvaConfig {
-  opacity?: number;
-  scale?: number;
-  objectPosition?: string;
-}
-
-const capaConfig: CapaSelvaConfig = {
-  opacity: 1,
-  scale: 0.6,
-  objectPosition: 'bottom center',
-};
 
 export function ProductosDestacados() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -27,33 +15,26 @@ export function ProductosDestacados() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        // ── CAMBIO: llama al Route Handler interno en lugar de Shopify directamente.
-        // featured=true trae los productos del tenant (puedes filtrar por categorySlug si creas
-        // una categoría "destacados" en StockUp, por ahora trae los primeros 10 activos).
         const res = await fetch('/api/stockup/products?featured=true&limit=10');
         const json = await res.json();
-
-        if (json.success) {
-          setProducts(json.data);
-        }
+        if (json.success) setProducts(json.data);
       } catch (error) {
-        console.error('[ProductosDestacados] Error fetching products:', error);
+        console.error('[ProductosDestacados] Error:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchFeatured();
   }, []);
 
-  const handleAddToCart = (variantId: string) => {
-    addToCart(variantId, 1);
+  // ── CAMBIO: recibe price y lo pasa a addToCart
+  const handleAddToCart = (variantId: string, quantity: number, price: number) => {
+    addToCart(variantId, quantity, price);
   };
 
   return (
     <section className="relative py-20 bg-frutaza-crema overflow-visible">
       <div className="relative z-[1]">
-        {/* Header */}
         <div className="container mx-auto px-4 text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-display font-bold text-frutaza-verde-oscuro mb-4">
             Productos destacados
@@ -64,7 +45,6 @@ export function ProductosDestacados() {
           <div className="w-24 h-1 bg-frutaza-amarillo mx-auto rounded-full" />
         </div>
 
-        {/* Productos */}
         {loading ? (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-frutaza-verde-vivo" />
@@ -75,21 +55,14 @@ export function ProductosDestacados() {
         ) : (
           <div className="text-center py-20">
             <span className="text-8xl mb-4 block">🎋</span>
-            <p className="text-xl text-gray-600 mb-8">
-              Próximamente tendremos productos disponibles
-            </p>
-            <p className="text-gray-500">
-              Estamos preparando nuestras deliciosas mermeladas para ti
-            </p>
+            <p className="text-xl text-gray-600 mb-8">Próximamente tendremos productos disponibles</p>
+            <p className="text-gray-500">Estamos preparando nuestras deliciosas mermeladas para ti</p>
           </div>
         )}
 
-        {/* CTA */}
         <div className="container mx-auto px-4 text-center mt-16 mr-auto mb-10">
           <Link href="/products">
-            <Button size="lg" variant="primary">
-              Ver Todos Los Productos 🛒
-            </Button>
+            <Button size="lg" variant="primary">Ver Todos Los Productos 🛒</Button>
           </Link>
         </div>
       </div>

@@ -1,42 +1,78 @@
-// app/api/stockup/cart/route.ts
-// Route Handler que actúa como proxy entre el browser y StockUp.
-// NUNCA expone la API Key al browser — todas las llamadas van por aquí.
-//
-// Operaciones soportadas:
-//   GET    ?sessionId=xxx           → obtener carrito
-//   POST   { action, sessionId, ... } → crear/agregar/actualizar/eliminar
+// app/api/stockup/cart/route.ts (en Frutaza)
+// Proxy entre Frutaza y el endpoint público del carrito de StockUp.
+// StockUp endpoint: /api/public/v1/cart (GET, POST, PATCH)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { stockupConfig } from '@/lib/stockup/config';
-import { adaptCart } from '@/lib/stockup/adapters';
-import type { StockUpCart } from '@/lib/stockup/types';
 
-const STOCKUP_API = `${stockupConfig.apiUrl}/api`;
+const CART_URL = `${stockupConfig.apiUrl}/api/public/v1/cart`;
 const HEADERS = {
   'Content-Type': 'application/json',
   'X-API-Key': stockupConfig.apiKey,
 };
 
-async function stockupCartFetch<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const res = await fetch(`${STOCKUP_API}${endpoint}`, {
-    ...options,
-    headers: { ...HEADERS, ...(options.headers || {}) },
-    cache: 'no-store',
+// ─── Adaptador: respuesta pública del carrito → Cart compatible con Shopify ──
+function adaptCart(data: any, sessionId?: string) {
+  if (!data) return null;
+
+  const lines = (data.items || []).map((item: any) => {
+    const productImage = item.variant?.image || item.product?.images?.[0] || null;
+    const unitPrice = Number(item.price ?? 0);
+    const totalAmount = unitPrice * item.quantity;
+
+    return {
+      node: {
+        id: item.id,
+        quantity: item.quantity,
+        merchandise: {
+          id: item.variantId || item.productId,
+          title: item.variant?.name || 'Único',
+          product: {
+            title: item.product?.name || '',
+            featuredImage: {
+              url: productImage || '/images/logo-redondo.png',
+              altText: item.product?.name || null,
+              width: 600,
+              height: 600,
+            },
+          },
+          price: {
+            amount: String(unitPrice),
+            currencyCode: 'COP',
+          },
+        },
+        cost: {
+          totalAmount: {
+            amount: String(totalAmount),
+            currencyCode: 'COP',
+          },
+        },
+      },
+    };
   });
 
-  const json = await res.json();
+  const subtotal = Number(data.totalValue ?? 0);
+  const firstItem = data.items?.[0];
+  // FIX: incluir cartSessionId para que StockUp cargue todos los items del carrito
+  const checkoutUrl = firstItem && sessionId
+    ? `${stockupConfig.apiUrl}/checkout/${stockupConfig.tenantSlug}/${firstItem.productId}?cartSessionId=${sessionId}`
+    : firstItem
+    ? `${stockupConfig.apiUrl}/checkout/${stockupConfig.tenantSlug}/${firstItem.productId}`
+    : '';
 
-  if (!res.ok || !json.success) {
-    throw new Error(json.error || `StockUp cart error: ${res.status}`);
-  }
-
-  return json.data as T;
+  return {
+    id: data.id,
+    checkoutUrl,
+    totalQuantity: data.itemCount ?? 0,
+    cost: {
+      subtotalAmount: { amount: String(subtotal), currencyCode: 'COP' },
+      totalAmount: { amount: String(subtotal), currencyCode: 'COP' },
+    },
+    lines: { edges: lines },
+  };
 }
 
-// ─── GET — Obtener carrito por sessionId ─────────────────────────────────────
+// ─── GET — Obtener carrito ────────────────────────────────────────────────────
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get('sessionId');
@@ -46,8 +82,18 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const cart = await stockupCartFetch<StockUpCart>(`/cart?sessionId=${sessionId}`);
-    return NextResponse.json({ success: true, data: adaptCart(cart) });
+    const res = await fetch(`${CART_URL}?sessionId=${sessionId}`, {
+      headers: HEADERS,
+      cache: 'no-store',
+    });
+
+    const json = await res.json();
+
+    if (!res.ok || !json.success) {
+      throw new Error(json.error || `Error ${res.status}`);
+    }
+
+    return NextResponse.json({ success: true, data: adaptCart(json.data) });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Error desconocido';
     return NextResponse.json({ success: false, error: message }, { status: 500 });
@@ -64,46 +110,106 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'sessionId requerido' }, { status: 400 });
     }
 
-    let cart: StockUpCart;
+    let json: any;
 
     switch (action) {
-      // Agregar item al carrito
+
+      // ── Agregar item ────────────────────────────────────────────────────────
       case 'add': {
-        const { productId, variantId, quantity = 1 } = rest;
-        cart = await stockupCartFetch<StockUpCart>('/cart', {
+        const { productId, variantId, quantity = 1, price } = rest;
+
+        if (!productId || price === undefined) {
+          return NextResponse.json(
+            { error: 'productId y price son requeridos' },
+            { status: 400 }
+          );
+        }
+
+        const res = await fetch(CART_URL, {
           method: 'POST',
-          body: JSON.stringify({ sessionId, productId, variantId, quantity }),
+          headers: HEADERS,
+          body: JSON.stringify({
+            sessionId,
+            productId,
+            variantId: variantId || null,
+            quantity,
+            price,
+          }),
+          cache: 'no-store',
         });
+
+        const text = await res.text();
+        try {
+          json = JSON.parse(text);
+        } catch {
+          throw new Error(`Respuesta inválida de StockUp: ${text.slice(0, 200)}`);
+        }
+
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || `Error ${res.status} al agregar`);
+        }
         break;
       }
 
-      // Actualizar cantidad de un item
+      // ── Actualizar cantidad ─────────────────────────────────────────────────
       case 'update': {
-        const { cartItemId, quantity } = rest;
-        cart = await stockupCartFetch<StockUpCart>('/cart', {
-          method: 'PUT',
-          body: JSON.stringify({ sessionId, cartItemId, quantity }),
+        const { cartItemId, quantity, cartId } = rest;
+
+        const res = await fetch(CART_URL, {
+          method: 'PATCH',
+          headers: HEADERS,
+          body: JSON.stringify({ cartId, itemId: cartItemId, quantity }),
+          cache: 'no-store',
         });
+
+        const text = await res.text();
+        try {
+          json = JSON.parse(text);
+        } catch {
+          throw new Error(`Respuesta inválida de StockUp: ${text.slice(0, 200)}`);
+        }
+
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || `Error ${res.status} al actualizar`);
+        }
         break;
       }
 
-      // Eliminar item del carrito
+      // ── Eliminar item (quantity = 0) ────────────────────────────────────────
       case 'remove': {
-        const { cartItemId } = rest;
-        cart = await stockupCartFetch<StockUpCart>('/cart', {
-          method: 'DELETE',
-          body: JSON.stringify({ sessionId, cartItemId }),
+        const { cartItemId, cartId } = rest;
+
+        const res = await fetch(CART_URL, {
+          method: 'PATCH',
+          headers: HEADERS,
+          body: JSON.stringify({ cartId, itemId: cartItemId, quantity: 0 }),
+          cache: 'no-store',
         });
+
+        const text = await res.text();
+        try {
+          json = JSON.parse(text);
+        } catch {
+          throw new Error(`Respuesta inválida de StockUp: ${text.slice(0, 200)}`);
+        }
+
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || `Error ${res.status} al eliminar`);
+        }
         break;
       }
 
       default:
-        return NextResponse.json({ error: `Acción desconocida: ${action}` }, { status: 400 });
+        return NextResponse.json(
+          { error: `Acción desconocida: ${action}` },
+          { status: 400 }
+        );
     }
 
-    return NextResponse.json({ success: true, data: adaptCart(cart) });
+    return NextResponse.json({ success: true, data: adaptCart(json.data) });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Error desconocido';
+    console.error('[/api/stockup/cart POST]', message);
     return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

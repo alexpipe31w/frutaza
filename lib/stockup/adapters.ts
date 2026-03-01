@@ -38,22 +38,36 @@ function toImage(url: string | null | undefined, altText?: string | null): Image
   };
 }
 
+/**
+ * FIX 1 — VARIANTES:
+ * Las variantes tienen attributes: {} vacío.
+ * Extraemos la etiqueta del nombre de la variante.
+ * "✨ MERMELADA DE COCONA -180GR✨" → "180GR"
+ * "✨ MERMELADA DE COCONA-50GR ✨"  → "50GR"
+ */
+function extractVariantLabel(name: string): string {
+  const match = name.match(/[-\s](\d+\s*(?:GR|G|ML|KG|L))\s*[✨\s]*$/i);
+  if (match) return match[1].toUpperCase();
+  return name.replace(/✨/g, '').replace(/\s+/g, ' ').trim();
+}
+
 // ─── Variante ────────────────────────────────────────────────────────────────
 
 export function adaptVariant(v: StockUpVariant, productPrice: number): ProductVariant {
   const attributes = v.attributes || {};
-  const selectedOptions = Object.entries(attributes).map(([name, value]) => ({
-    name,
-    value: String(value),
-  }));
 
-  if (selectedOptions.length === 0) {
-    selectedOptions.push({ name: 'Presentación', value: v.name });
-  }
+  // FIX 1: si attributes está vacío, usar el peso extraído del nombre
+  const selectedOptions =
+    Object.keys(attributes).length > 0
+      ? Object.entries(attributes).map(([name, value]) => ({
+          name,
+          value: String(value),
+        }))
+      : [{ name: 'Presentación', value: extractVariantLabel(v.name) }];
 
   return {
     id: v.id,
-    title: v.name,
+    title: extractVariantLabel(v.name), // "180GR" o "50GR" en lugar del nombre completo
     availableForSale: v.stock > 0,
     selectedOptions,
     price: toMoney(v.price ?? productPrice),
@@ -120,14 +134,15 @@ export function adaptProducts(products: StockUpProduct[]): Product[] {
 
 function adaptCartItem(item: StockUpCartItem): CartLine {
   const itemTotal = item.price * item.quantity;
-  const productImage = item.product?.images?.[0] || null;
+  const productImage = item.variant?.image || item.product?.images?.[0] || null;
 
   return {
     id: item.id,
     quantity: item.quantity,
     merchandise: {
       id: item.variantId || item.productId,
-      title: item.variant?.name || 'Único',
+      // FIX: mostrar label limpio en el carrito también
+      title: item.variant?.name ? extractVariantLabel(item.variant.name) : 'Único',
       product: {
         title: item.product?.name || '',
         featuredImage: toImage(productImage, item.product?.name),
@@ -144,6 +159,8 @@ export function adaptCart(
   stockupCart: StockUpCart,
   tenantSlug: string = stockupConfig.tenantSlug
 ): Cart {
+  console.log('[adaptCart] items:', JSON.stringify(stockupCart.items?.slice(0,1)));
+  console.log('[adaptCart] sessionId:', stockupCart.sessionId);
   const lines = (stockupCart.items || []).map(adaptCartItem);
 
   const subtotal = lines.reduce(
@@ -152,8 +169,9 @@ export function adaptCart(
   );
 
   const firstProductId = stockupCart.items?.[0]?.productId || '';
+  // Pasamos sessionId como query param para que StockUp cargue todos los items del carrito
   const checkoutUrl = firstProductId
-    ? `${stockupConfig.apiUrl}/checkout/${tenantSlug}/${firstProductId}`
+    ? `${stockupConfig.apiUrl}/checkout/${tenantSlug}/${firstProductId}?sessionId=${stockupCart.id}&cartSessionId=${stockupCart.sessionId}`
     : '';
 
   return {

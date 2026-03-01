@@ -1,15 +1,14 @@
 'use client';
 
 import { ProductoEnRama } from './ProductoEnRama';
-import type { Product } from '@/lib/stockup/types'; // ← ÚNICO CAMBIO
+import type { Product } from '@/lib/stockup/types';
 
 type Props = {
   products: Product[];
-  onAddToCart: (variantId: string) => void;
+  onAddToCart: (variantId: string, quantity: number, price: number) => void;
 };
 
 export function ProductosEnRamas({ products, onAddToCart }: Props) {
-  // Partir productos en filas de 2
   const rows: Product[][] = [];
   for (let i = 0; i < products.length; i += 2) {
     rows.push(products.slice(i, i + 2));

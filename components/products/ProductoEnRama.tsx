@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
-import type { Product } from '@/lib/stockup/types'; // ← CAMBIO
+import type { Product } from '@/lib/stockup/types';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -13,8 +13,20 @@ if (typeof window !== 'undefined') {
 type Props = {
   product: Product;
   index: number;
-  onAddToCart: (variantId: string) => void;
+  onAddToCart: (variantId: string, quantity: number, price: number) => void;
 };
+
+// Normaliza strings para comparación: minúsculas + sin tildes
+function normalize(str: string): string {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+const SIZE_OPTION_NAMES = [
+  'size', 'peso', 'presentacion', 'presentation', 'capacidad', 'volumen', 'tamano',
+];
 
 export function ProductoEnRama({ product, index, onAddToCart }: Props) {
   const productoRef = useRef<HTMLDivElement>(null);
@@ -27,12 +39,18 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     variants[0]?.node.id ?? ''
   );
 
+  // Sincronizar selectedVariantId si cambian las variantes (ej: hydration)
+  useEffect(() => {
+    if (variants.length > 0 && !variants.find((v) => v.node.id === selectedVariantId)) {
+      setSelectedVariantId(variants[0].node.id);
+    }
+  }, [variants, selectedVariantId]);
+
   const selectedVariant = useMemo(
     () => variants.find((v) => v.node.id === selectedVariantId)?.node,
     [variants, selectedVariantId]
   );
 
-  // Detectar móvil
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -40,7 +58,6 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Animación solo en desktop
   useEffect(() => {
     if (!productoRef.current || isMobile) return;
 
@@ -67,13 +84,17 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
     return () => ctx.revert();
   }, [isMobile]);
 
-  // ── CAMBIO: images.edges[0].node.url → images.edges[0].node (ya es Image)
   const imagen = product.images.edges[0]?.node;
-
-  // ── CAMBIO: precio viene como string en Money.amount (igual que Shopify gracias al adapter)
   const precio = selectedVariant
     ? selectedVariant.price
     : product.priceRange.minVariantPrice;
+
+  const precioNumerico = parseFloat(precio.amount);
+
+  // FIX BUG 1: detectar si hay variantes REALES (más de 1, o la única no es "default")
+  const hasRealVariants =
+    variants.length > 1 ||
+    (variants.length === 1 && variants[0].node.id !== `${product.id}-default`);
 
   return (
     <div className="relative flex items-center justify-center px-4 py-10">
@@ -103,7 +124,6 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
             </div>
           )}
 
-          {/* Producto */}
           {imagen ? (
             <div className="absolute bottom-2 z-10 w-[60%] max-w-sm">
               <Image
@@ -124,12 +144,10 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
         {/* Contenido expandido */}
         {isOpen && (
           <div className="mt-2">
-            {/* ── CAMBIO: product.title (mapeado desde name en el adapter) */}
             <h3 className="text-2xl font-display font-bold text-frutaza-verde-oscuro mb-2">
               {product.title}
             </h3>
 
-            {/* Descripción — igual, description sigue siendo string */}
             <div className="text-gray-600 text-sm mb-4 space-y-3">
               {product.description
                 .split(/(\*[^*]+\*)/g)
@@ -151,19 +169,17 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                 })}
             </div>
 
-            {/* Selector de presentación */}
-            {variants.length > 1 && (
+            {/* FIX BUG 1: Selector de variantes — aparece si hay variantes reales */}
+            {hasRealVariants && (
               <div className="mb-4">
                 <p className="text-sm text-gray-600 mb-2">Presentación:</p>
                 <div className="flex flex-wrap gap-2">
                   {variants.map(({ node }) => {
-                    // ── CAMBIO: selectedOptions viene del adapter que convierte
-                    // attributes JSON → [{ name, value }] — misma forma que Shopify
                     const options = node.selectedOptions || [];
+
+                    // FIX: comparación normalizada (sin tildes, case-insensitive)
                     const sizeOption = options.find((opt) =>
-                      ['size', 'peso', 'presentación', 'presentation', 'capacidad'].includes(
-                        opt.name.toLowerCase()
-                      )
+                      SIZE_OPTION_NAMES.includes(normalize(opt.name))
                     );
                     const label = sizeOption ? sizeOption.value : node.title;
                     const active = node.id === selectedVariantId;
@@ -190,17 +206,19 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
               </div>
             )}
 
-            {/* Precio + botón — precio.amount sigue siendo string gracias al adapter */}
+            {/* Precio + botón */}
             <div className="flex items-center justify-between">
               <span className="text-3xl font-bold text-frutaza-amarillo">
-                ${parseFloat(precio.amount).toLocaleString('es-CO')}
+                ${precioNumerico.toLocaleString('es-CO')}
                 <span className="text-sm ml-1">{precio.currencyCode}</span>
               </span>
 
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (selectedVariant) onAddToCart(selectedVariant.id);
+                  if (selectedVariant) {
+                    onAddToCart(selectedVariant.id, 1, precioNumerico);
+                  }
                 }}
                 disabled={!selectedVariant}
                 className="bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white px-6 py-3 rounded-full font-semibold transition-colors duration-300 transform hover:scale-105 disabled:bg-gray-300 disabled:cursor-not-allowed"
@@ -209,7 +227,6 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
               </button>
             </div>
 
-            {/* Badge */}
             <div className="mt-4 inline-flex items-center gap-2 bg-frutaza-crema px-4 py-2 rounded-full">
               <span className="text-xl">🌿</span>
               <span className="text-sm font-semibold text-frutaza-verde-oscuro">
