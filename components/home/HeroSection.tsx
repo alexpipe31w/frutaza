@@ -25,7 +25,6 @@ export function HeroSection() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const buttonsRef = useRef<HTMLDivElement>(null);
 
-  const capa1Ref = useRef<HTMLDivElement>(null);
   const capa2Ref = useRef<HTMLDivElement>(null);
   const capa3Ref = useRef<HTMLDivElement>(null);
 
@@ -127,17 +126,6 @@ export function HeroSection() {
       });
 
       // Parallax capas - SOLO DESKTOP
-      gsap.to(capa1Ref.current, {
-        y: 200,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-
       gsap.to(capa2Ref.current, {
         y: 100,
         ease: 'none',
@@ -184,25 +172,12 @@ export function HeroSection() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       <div ref={contentWrapperRef} className="absolute inset-0">
-        {/* CAPA 1 - FONDO */}
-        <div
-          ref={capa1Ref}
-          className="absolute inset-0 w-full h-full"
-          style={{
-            backgroundImage: 'url(/images/backgrounds/selva-home-capa3.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            zIndex: 1,
-            willChange: isMobile ? 'auto' : 'transform',
-          }}
-        />
-
         {/* CAPA 2 - MEDIO */}
         <div
           ref={capa2Ref}
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: 'url(/images/backgrounds/selva-home-capa2.png)',
+            backgroundImage: 'url(/images/backgrounds/capa2.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             zIndex: 2,
@@ -215,7 +190,7 @@ export function HeroSection() {
           ref={capa3Ref}
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: 'url(/images/backgrounds/selva-home-capa1.png)',
+            backgroundImage: 'url(/images/backgrounds/capa1.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             zIndex: 3,
@@ -261,7 +236,7 @@ export function HeroSection() {
                   animationType="float"
                   duration={4}
                   delay={0}
-                  zIndex={2}
+                  zIndex={4}
                 />
               );
             })()}
@@ -277,7 +252,7 @@ export function HeroSection() {
                   animationType="float"
                   duration={5}
                   delay={1}
-                  zIndex={2}
+                  zIndex={4}
                 />
               );
             })()}
@@ -293,7 +268,7 @@ export function HeroSection() {
                   animationType="bounce"
                   duration={3.5}
                   delay={2}
-                  zIndex={2}
+                  zIndex={4}
                 />
               );
             })()}
@@ -316,7 +291,7 @@ export function HeroSection() {
 
             {/* Mono */}
             {(() => {
-              const a = animalProps(5, 20, 300);
+              const a = animalProps(2, -14, 250);
               return (
                 <AnimalFlotante
                   src="/images/animals/mono.svg"
@@ -327,14 +302,14 @@ export function HeroSection() {
                   animationType="swing"
                   duration={7}
                   delay={2}
-                  zIndex={2}
+                  zIndex={4}
                 />
               );
             })()}
 
             {/* Capibara */}
             {(() => {
-              const a = animalProps(62, 50, 805);
+              const a = animalProps(75, 53, 705);
               return (
                 <AnimalFlotante
                   src="/images/animals/capibara.svg"
@@ -345,43 +320,7 @@ export function HeroSection() {
                   animationType="float"
                   duration={6.5}
                   delay={0}
-                  zIndex={2}
-                />
-              );
-            })()}
-
-            {/* Jaguar */}
-            {(() => {
-              const a = animalProps(20, 20, 800);
-              return (
-                <AnimalFlotante
-                  src="/images/animals/jaguar.svg"
-                  alt="Jaguar"
-                  initialX={a.x}
-                  initialY={a.y}
-                  size={a.size}
-                  animationType="float"
-                  duration={8}
-                  delay={1.5}
-                  zIndex={2}
-                />
-              );
-            })()}
-
-            {/* Tigrillo */}
-            {(() => {
-              const a = animalProps(-10, 60, 450);
-              return (
-                <AnimalFlotante
-                  src="/images/animals/tigrillo.svg"
-                  alt="Tigrillo"
-                  initialX={a.x}
-                  initialY={a.y}
-                  size={a.size}
-                  animationType="float"
-                  duration={7}
-                  delay={1}
-                  zIndex={2}
+                  zIndex={4}
                 />
               );
             })()}
