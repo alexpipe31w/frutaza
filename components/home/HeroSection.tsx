@@ -225,7 +225,7 @@ export function HeroSection() {
           <>
             {/* Mariposas */}
             {(() => {
-              const a = animalProps(12, 20, 200);
+              const a = animalProps(25, 5, 100);
               return (
                 <AnimalFlotante
                   src="/images/animals/mariposa.svg"
@@ -241,7 +241,7 @@ export function HeroSection() {
               );
             })()}
             {(() => {
-              const a = animalProps(88, 30, 200);
+              const a = animalProps(50, 10, 80);
               return (
                 <AnimalFlotante
                   src="/images/animals/mariposa.svg"
@@ -257,7 +257,7 @@ export function HeroSection() {
               );
             })()}
             {(() => {
-              const a = animalProps(25, 75, 300);
+              const a = animalProps(25, 65, 200);
               return (
                 <AnimalFlotante
                   src="/images/animals/mariposa.svg"
@@ -273,7 +273,7 @@ export function HeroSection() {
               );
             })()}
             {(() => {
-              const a = animalProps(75, 70, 250);
+              const a = animalProps(75, 50, 200);
               return (
                 <AnimalFlotante
                   src="/images/animals/mariposa.svg"
@@ -291,7 +291,7 @@ export function HeroSection() {
 
             {/* Mono */}
             {(() => {
-              const a = animalProps(2, -14, 250);
+              const a = animalProps(5, -10, 200);
               return (
                 <AnimalFlotante
                   src="/images/animals/mono.svg"
