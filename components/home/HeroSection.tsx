@@ -328,7 +328,7 @@ export function HeroSection() {
         )}
       </div>
 
-      {/* CONTENIDO HERO - Visible directo en móvil */}
+{/* CONTENIDO HERO - Visible directo en móvil */}
       {hasInteracted && (
         <div
           ref={contentBoxRef}
@@ -338,7 +338,7 @@ export function HeroSection() {
         >
           <div className="rounded-3xl p-8 md:p-12">
             <div ref={titleRef} className="mb-6 w-full flex justify-center">
-              <div className="relative w-full max-w-[150px] md:max-w-[220px] lg:max-w-[300px] group">
+              <div className="relative w-full max-w-[210px] md:max-w-[220px] lg:max-w-[300px] -mt-8 md:mt-0 group">
                 <Image
                   src="/images/logo-fondo-oscuro.png"
                   alt="Frutaza - Frutas Salvajes, Dulzura Natural"
@@ -357,7 +357,7 @@ export function HeroSection() {
 
             <h1
               ref={subtitleRef}
-              className="text-xl md:text-2xl font-normal text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+              className="hidden md:block text-xl md:text-2xl font-normal text-white mb-8 max-w-3xl mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
             >
               Mermeladas del Caquetá hechas con frutas amazónicas
               100% naturales
@@ -366,7 +366,7 @@ export function HeroSection() {
 
             <div
               ref={buttonsRef}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              className="hidden md:flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Link
                 href="/products"
