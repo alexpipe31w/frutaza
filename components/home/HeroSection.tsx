@@ -291,7 +291,7 @@ export function HeroSection() {
 
             {/* Mono */}
             {(() => {
-              const a = animalProps(5, -10, 200);
+              const a = animalProps(2, 2, 170);
               return (
                 <AnimalFlotante
                   src="/images/animals/mono.svg"
