@@ -57,13 +57,13 @@ const slides = [
     title: 'Calidad Premium',
     description: 'Seleccionamos solo las mejores frutas para nuestras mermeladas',
     icon: '⭐',
-    image: '/images/carrusel/foto9.PNG',
+    image: '/images/carrusel/foto9.jpg',
   },
   {
     title: 'Tradición Familiar',
     description: 'Recetas transmitidas de generación en generación',
     icon: '👪',
-    image: '/images/carrusel/foto10.jpg',
+    image: '/images/carrusel/foto10.PNG',
   },
   {
     title: 'Biodiversidad',
