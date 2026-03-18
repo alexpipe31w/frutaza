@@ -15,7 +15,7 @@ const slides = [
     title: 'Elaboradas a Mano',
     description: 'Métodos tradicionales que preservan los sabores auténticos de la selva amazónica',
     icon: '🍯',
-    image: '/images/carrusel/foto1.jpg',
+    image: '/images/carrusel/foto1.PNG',
   },
   {
     title: 'Sostenibilidad y Comunidad',
@@ -57,7 +57,7 @@ const slides = [
     title: 'Calidad Premium',
     description: 'Seleccionamos solo las mejores frutas para nuestras mermeladas',
     icon: '⭐',
-    image: '/images/carrusel/foto9.jpg',
+    image: '/images/carrusel/foto9.PNG',
   },
   {
     title: 'Tradición Familiar',
