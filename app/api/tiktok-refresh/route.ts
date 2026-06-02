@@ -38,39 +38,27 @@ export async function GET() {
     const results = await response.json();
     console.log(`Obtenidos ${results.length} videos`);
 
-    const videosWithMetadata = await Promise.all(
-      results.slice(0, 9).map(async (item: any) => {
-        const videoId = item.webVideoUrl?.split('/video/')[1] || '';
-        
-        let oembedData = null;
-        try {
-          const oembedResponse = await fetch(
-            `https://www.tiktok.com/oembed?url=${encodeURIComponent(item.webVideoUrl)}`
-          );
-          if (oembedResponse.ok) {
-            oembedData = await oembedResponse.json();
-          }
-        } catch (err) {
-          console.error('Error fetching oEmbed:', err);
-        }
+    const videosWithMetadata = results.slice(0, 9).map((item: any) => {
+      const videoId = item.webVideoUrl?.split('/video/')[1]?.split('?')[0] || '';
+      const authorName = item.authorMeta?.name || item['authorMeta.name'] || 'fruta.za';
 
-        return {
-          id: videoId,
-          url: item.webVideoUrl || '',
-          title: item.text || 'Video de TikTok',
-          thumbnail_url: oembedData?.thumbnail_url || item['authorMeta.avatar'] || '',
-          author_name: item['authorMeta.name'] || 'Fruta.za',
-          author_url: `https://www.tiktok.com/@${item['authorMeta.name'] || 'fruta.za'}`,
-          stats: {
-            likes: item.diggCount || 0,
-            comments: item.commentCount || 0,
-            shares: item.shareCount || 0,
-            views: item.playCount || 0,
-          },
-          created_at: item.createTimeISO || new Date().toISOString(),
-        };
-      })
-    );
+      return {
+        id: videoId,
+        url: item.webVideoUrl || '',
+        title: item.text || 'Video de TikTok',
+        // NO guardamos thumbnail_url: las URLs de TikTok CDN caducan.
+        // El endpoint /api/tiktok-thumb?url=... las obtiene frescas con caché CDN.
+        author_name: authorName,
+        author_url: `https://www.tiktok.com/@${authorName}`,
+        stats: {
+          likes: item.diggCount || 0,
+          comments: item.commentCount || 0,
+          shares: item.shareCount || 0,
+          views: item.playCount || 0,
+        },
+        created_at: item.createTimeISO || new Date().toISOString(),
+      };
+    });
 
     const dataToSave = {
       videos: videosWithMetadata,

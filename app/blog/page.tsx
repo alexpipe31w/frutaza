@@ -18,7 +18,7 @@ interface TikTokVideo {
   id: string;
   url: string;
   title: string;
-  thumbnail_url: string;
+  thumbnail_url?: string;
   author_name: string;
   author_url: string;
   stats: {
@@ -277,12 +277,17 @@ export default function BlogPage() {
                     className="block"
                   >
                     <div className="aspect-[9/16] relative">
-                      {video.thumbnail_url ? (
+                      {video.url ? (
                         <Image
-                          src={video.thumbnail_url}
+                          src={`/api/tiktok-thumb?url=${encodeURIComponent(video.url)}`}
                           alt={video.title}
                           fill
                           className="object-cover"
+                          unoptimized
+                          onError={(e) => {
+                            // Si el proxy falla, ocultar la imagen y mostrar fallback
+                            (e.currentTarget as HTMLImageElement).style.display = 'none';
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-frutaza-verde-vivo/20 to-frutaza-amarillo/20 flex items-center justify-center">
