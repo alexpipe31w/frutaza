@@ -109,11 +109,11 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
       onClick={() => setIsOpen((prev) => !prev)}
     >
       {/* Imagen sobre la nube */}
-      <div className="relative h-44 flex items-end justify-center">
+      <div className="relative h-52 flex items-end justify-center">
         {/* Nube de fondo */}
-        <div className="absolute inset-x-0 bottom-0 z-0 translate-y-6">
+        <div className="absolute inset-x-0 bottom-0 z-0 translate-y-3">
           <Image
-            src="/images/backgrounds/nube33.png"
+            src="/images/backgrounds/nubes33.png"
             alt="Nube"
             width={600}
             height={450}
@@ -125,7 +125,7 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
 
         {/* Imagen del producto */}
         {imagenUrl ? (
-          <div className="relative z-10 w-[52%] mb-8">
+          <div className="relative z-10 w-[62%] mb-12">
             <Image
               src={imagenUrl.url}
               alt={imagenUrl.altText || product.title}
@@ -137,22 +137,26 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
             />
           </div>
         ) : (
-          <div className="relative z-10 w-[52%] mb-8 aspect-square bg-gradient-to-br from-frutaza-amarillo to-frutaza-verde-vivo rounded-3xl" />
+          <div className="relative z-10 w-[62%] mb-12 aspect-square bg-gradient-to-br from-frutaza-amarillo to-frutaza-verde-vivo rounded-3xl" />
         )}
       </div>
 
       {/* Preview siempre visible: título + precio */}
-      <div className="text-center px-3 pt-5 pb-1">
-        <h3 className="text-base font-display font-bold text-frutaza-verde-oscuro leading-tight mb-1">
-          {product.title}
-        </h3>
-        <p className="text-lg font-bold text-frutaza-amarillo">
-          ${precioNumerico.toLocaleString('es-CO')}
-          <span className="text-xs font-normal text-gray-500 ml-1">{precio.currencyCode}</span>
-        </p>
-        <span className="text-xs text-gray-400 mt-1 inline-block select-none">
-          {isOpen ? '▲ Ocultar' : '▼ Ver detalles'}
-        </span>
+      <div className="text-center px-3 -mt-12 pt-2 pb-1 relative z-10">
+        <div className="inline-block bg-white/80 backdrop-blur-sm rounded-xl px-3 py-1.5 shadow-sm">
+          <h3 className="text-base font-display font-bold text-frutaza-verde-oscuro leading-tight mb-0.5">
+            {product.title}
+          </h3>
+          <p className="text-lg font-bold text-frutaza-amarillo">
+            ${precioNumerico.toLocaleString('es-CO')}
+            <span className="text-xs font-normal text-gray-500 ml-1">{precio.currencyCode}</span>
+          </p>
+        </div>
+        <div className="mt-1">
+          <span className="text-xs text-gray-500 select-none">
+            {isOpen ? '▲ Ocultar' : '▼ Ver detalles'}
+          </span>
+        </div>
       </div>
 
       {/* Contenido expandido al hacer click */}
