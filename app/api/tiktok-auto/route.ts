@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
 import { get } from '@vercel/edge-config';
 
+// Los videos solo cambian una vez por semana (cron de /api/tiktok-refresh), asi que
+// NO se lee Edge Config en cada visita al blog: la respuesta se cachea 6h en el CDN
+// de Vercel via s-maxage. Antes no habia Cache-Control => 1 lectura de Edge Config
+// por cada visita al blog.
+// El SDK de Edge Config lee con no-store, asi que la ruta es dinamica por narices:
+// quien ahorra las lecturas es el CDN, no el cache de datos de Next.
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600;
+
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, s-maxage=21600, stale-while-revalidate=86400',
+};
 
 export async function GET() {
   try {
@@ -11,16 +20,29 @@ export async function GET() {
     if (!data) {
       return NextResponse.json(
         { error: 'No hay videos disponibles', videos: [], success: false },
-        { status: 404 }
+        { status: 404, headers: CACHE_HEADERS }
       );
     }
 
-    return NextResponse.json({
-      videos: (data as any).videos || [],
-      success: true,
-      fetched_at: (data as any).fetched_at,
-      total_videos: (data as any).total_videos,
-    });
+    const parsed = data as {
+      videos?: Array<{ id?: string; url?: string }>;
+      fetched_at?: string;
+      total_videos?: number;
+    };
+
+    // Defensa en profundidad: si en Edge Config quedan videos sin id/url (los escribia
+    // el refresh antiguo cuando Apify fallaba), no los servimos al blog.
+    const videos = (parsed.videos || []).filter((v) => v?.id && v?.url);
+
+    return NextResponse.json(
+      {
+        videos,
+        success: true,
+        fetched_at: parsed.fetched_at,
+        total_videos: videos.length,
+      },
+      { headers: CACHE_HEADERS }
+    );
 
   } catch (error) {
     console.error('Error leyendo Edge Config:', error);
