@@ -111,7 +111,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
               filter: 'drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3))',
             }}
           >
-            <svg viewBox="0 0 128 128" className="w-12 h-12 md:w-16 md:h-16 text-frutaza-verde-vivo" fill="currentColor">
+            <svg viewBox="0 0 128 128" className="w-12 h-12 md:w-16 md:h-16 text-frutatza-verde-vivo" fill="currentColor">
               <path d="M86.1,46.7C87.9,43.2,89,39.2,89,35c0-13.8-11.2-25-25-25S39,21.2,39,35c0,0.6,0,1.2,0.1,1.7C26.2,41.1,17,53.2,17,67.5C17,85.4,31.6,100,49.5,100h27c15.2,0,27.5-12.3,27.5-27.5C104,60.7,96.5,50.6,86.1,46.7z"/>
             </svg>
           </div>
@@ -179,7 +179,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   {/* Botón enviar */}
                   <button
                     type="submit"
-                    className="w-full px-6 md:px-8 py-3 md:py-4 bg-frutaza-verde-oscuro hover:bg-frutaza-verde-vivo text-white rounded-full font-bold text-base md:text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2 group"
+                    className="w-full px-6 md:px-8 py-3 md:py-4 bg-frutatza-verde-oscuro hover:bg-frutatza-verde-vivo text-white rounded-full font-bold text-base md:text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2 group"
                   >
                     Enviar Mensaje
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform">
@@ -196,7 +196,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     <p className="text-white/90 text-xs md:text-sm mb-2">También puedes escribirnos a:</p>
                     <a 
                       href="mailto:Fruta.zaaa@gmail.com" 
-                      className="inline-flex items-center gap-2 text-white hover:text-frutaza-amarillo transition-colors duration-300 font-semibold text-sm md:text-base"
+                      className="inline-flex items-center gap-2 text-white hover:text-frutatza-amarillo transition-colors duration-300 font-semibold text-sm md:text-base"
                     >
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 md:w-5 md:h-5 flex-shrink-0">
                         <rect x={3} y={5} width={18} height={14} rx={2} strokeLinecap="round" strokeLinejoin="round"/>

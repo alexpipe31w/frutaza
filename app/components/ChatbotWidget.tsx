@@ -47,12 +47,12 @@ export default function ChatbotWidget() {
         <button
           onClick={() => setIsOpen(true)}
           className="fixed bottom-6 right-6 bg-gradient-to-br from-[#50AE31] to-[#0B4227] p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 z-50 leaf-shadow"
-          aria-label="Abrir chat de Frutaza"
+          aria-label="Abrir chat de Frutatza"
         >
           <div className="relative w-12 h-12">
             <Image
-              src="/images/variante-color.png"
-              alt="Chat Frutaza"
+              src="/images/logo-circular.png"
+              alt="Chat Frutatza"
               fill
               className="object-contain"
             />
@@ -68,14 +68,14 @@ export default function ChatbotWidget() {
             <div className="flex items-center gap-3">
               <div className="relative w-8 h-8">
                 <Image
-                  src="/images/variante-color.png"
-                  alt="Frutaza"
+                  src="/images/logo-circular.png"
+                  alt="Frutatza"
                   fill
                   className="object-contain"
                 />
               </div>
               <div>
-                <h3 className="font-bold text-lg">Asistente Frutaza</h3>
+                <h3 className="font-bold text-lg">Asistente Frutatza</h3>
                 <p className="text-xs text-[#F5F1E8]">En línea 🟢</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function ChatbotWidget() {
             {messages.length === 0 && (
               <div className="text-[#0B4227] text-center text-sm mt-10 bg-white/60 backdrop-blur-sm p-4 rounded-lg">
                 <div className="text-2xl mb-2">🍯</div>
-                <p className="font-semibold">¡Hola! Soy el asistente de Frutaza</p>
+                <p className="font-semibold">¡Hola! Soy el asistente de Frutatza</p>
                 <p className="text-xs mt-2">¿En qué puedo ayudarte hoy?</p>
               </div>
             )}

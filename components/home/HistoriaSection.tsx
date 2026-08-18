@@ -140,7 +140,7 @@ export function HistoriaSection() {
     <section
       id="historia"
       ref={sectionRef}
-      className="relative py-16 md:py-24 bg-frutaza-verde-oscuro overflow-hidden"
+      className="relative py-16 md:py-24 bg-frutatza-verde-oscuro overflow-hidden"
     >
       {/* ONDA SUPERIOR - Separa de la sección de arriba */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
@@ -152,7 +152,7 @@ export function HistoriaSection() {
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-frutaza-amarillo"
+            className="fill-frutatza-amarillo"
           />
         </svg>
       </div>
@@ -167,7 +167,7 @@ export function HistoriaSection() {
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-frutaza-crema"
+            className="fill-frutatza-crema"
           />
         </svg>
       </div>
@@ -211,7 +211,7 @@ export function HistoriaSection() {
             </h2>
             <p className="text-xl md:text-2xl leading-relaxed">
               Más que mermeladas, somos el{' '}
-              <span className="text-frutaza-verde-vivo font-semibold">
+              <span className="text-frutatza-verde-vivo font-semibold">
                 latido del corazón de Caquetá
               </span>
               .
@@ -219,27 +219,27 @@ export function HistoriaSection() {
             <p className="text-lg md:text-xl leading-relaxed text-white/90">
               Transformamos frutas silvestres en sabores que cuentan historias de una tierra de belleza 
               indómita, celebrando la vida, la naturaleza y nuestro{' '}
-              <span className="text-frutaza-amarillo font-semibold">legado amazónico</span>.
+              <span className="text-frutatza-amarillo font-semibold">legado amazónico</span>.
             </p>
             <p className="text-lg md:text-xl leading-relaxed text-white/90">
               Cada frasco lleva la esencia de la selva tropical, la dedicación de nuestros agricultores, y el 
               compromiso de preservar los tesoros de nuestra tierra para las futuras generaciones.
             </p>
-            <div className="w-32 h-1 bg-frutaza-amarillo rounded-full mt-8" />
+            <div className="w-32 h-1 bg-frutatza-amarillo rounded-full mt-8" />
           </div>
 
           {/* Imagen - Derecha */}
           <div className="relative">
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden border-4 border-frutaza-verde-vivo/30 shadow-2xl">
+            <div className="relative w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden border-4 border-frutatza-verde-vivo/30 shadow-2xl">
               <img
                 src="/images/nuestra-escencia-mapa.png"
                 alt="Mapa de Caquetá con frutas y animales"
                 className="object-cover w-full h-full"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-frutaza-verde-oscuro/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-frutatza-verde-oscuro/20 to-transparent" />
             </div>
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-frutaza-amarillo/20 rounded-full blur-3xl" />
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-frutaza-verde-vivo/20 rounded-full blur-3xl" />
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-frutatza-amarillo/20 rounded-full blur-3xl" />
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-frutatza-verde-vivo/20 rounded-full blur-3xl" />
           </div>
         </div>
       </div>

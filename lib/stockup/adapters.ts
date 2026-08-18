@@ -18,7 +18,7 @@ import type {
 import { stockupConfig } from './config';
 
 const CURRENCY = 'COP';
-const PLACEHOLDER_IMAGE = '/images/logo-redondo.png';
+const PLACEHOLDER_IMAGE = '/images/logo-circular.png';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -157,7 +157,7 @@ export function adaptCart(
 
   const firstProductId = stockupCart.items?.[0]?.productId || '';
 
-  // FIX: usar solo cartSessionId=stockupCart.sessionId (el frutaza-session-id).
+  // FIX: usar solo cartSessionId=stockupCart.sessionId (el frutatza-session-id).
   // NO incluir sessionId=stockupCart.id (el UUID interno del carrito en BD),
   // porque el CheckoutPage de StockUp solo lee cartSessionId en searchParams.
   const checkoutUrl = firstProductId && stockupCart.sessionId

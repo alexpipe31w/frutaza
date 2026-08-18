@@ -220,7 +220,7 @@ export function MisionSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-16 md:py-24 bg-gradient-to-b from-frutaza-verde-oscuro via-frutaza-verde-oscuro/95 to-frutaza-verde-oscuro overflow-hidden"
+      className="relative py-16 md:py-24 bg-gradient-to-b from-frutatza-verde-oscuro via-frutatza-verde-oscuro/95 to-frutatza-verde-oscuro overflow-hidden"
     >
       {/* ONDA SUPERIOR - Separa de la sección de arriba */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
@@ -232,7 +232,7 @@ export function MisionSection() {
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-frutaza-crema"
+            className="fill-frutatza-crema"
           />
         </svg>
       </div>
@@ -247,7 +247,7 @@ export function MisionSection() {
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-frutaza-crema"
+            className="fill-frutatza-crema"
           />
         </svg>
       </div>
@@ -315,7 +315,7 @@ export function MisionSection() {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-4 mt-[60px]">
             Un poco más sobre nosotros
           </h2>
-          <div className="w-24 h-1 bg-frutaza-amarillo mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-frutatza-amarillo mx-auto rounded-full" />
         </div>
 
         <div
@@ -339,14 +339,14 @@ export function MisionSection() {
                 />
               </div>
 
-              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/30 hover:border-white/50 transition-all duration-500 hover:shadow-frutaza-amarillo/20">
+              <div className="bg-white/20 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-2xl border border-white/30 hover:border-white/50 transition-all duration-500 hover:shadow-frutatza-amarillo/20">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="text-4xl flex-shrink-0">{card.emoji}</div>
                   <div>
                     <h3 className="text-xl md:text-2xl lg:text-3xl font-display font-bold text-white mb-1">
                       {card.title}
                     </h3>
-                    <p className="text-sm text-frutaza-amarillo/80 italic">
+                    <p className="text-sm text-frutatza-amarillo/80 italic">
                       {card.subtitle}
                     </p>
                   </div>
@@ -361,7 +361,7 @@ export function MisionSection() {
                   </p>
                 </div>
 
-                <div className="mt-6 w-full h-1 bg-gradient-to-r from-frutaza-verde-vivo/50 via-frutaza-amarillo/50 to-transparent rounded-full" />
+                <div className="mt-6 w-full h-1 bg-gradient-to-r from-frutatza-verde-vivo/50 via-frutatza-amarillo/50 to-transparent rounded-full" />
               </div>
             </div>
           ))}
@@ -369,21 +369,21 @@ export function MisionSection() {
 
         <div className="text-center mt-12 md:mt-16">
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 group hover:border-white/40 transition-all duration-300">
-            <svg viewBox="0 0 128 128" className="w-8 h-8 text-frutaza-verde-vivo group-hover:scale-110 transition-transform" fill="currentColor">
+            <svg viewBox="0 0 128 128" className="w-8 h-8 text-frutatza-verde-vivo group-hover:scale-110 transition-transform" fill="currentColor">
               <path d="M86.1,46.7C87.9,43.2,89,39.2,89,35c0-13.8-11.2-25-25-25S39,21.2,39,35c0,0.6,0,1.2,0.1,1.7C26.2,41.1,17,53.2,17,67.5C17,85.4,31.6,100,49.5,100h27c15.2,0,27.5-12.3,27.5-27.5C104,60.7,96.5,50.6,86.1,46.7z"/>
               <path d="M60.5,125.5c0.8,0,1.5-0.7,1.5-1.5v-22.5h14.5c16,0,29-13,29-29c0-11.5-6.9-22-17.4-26.6c1.5-3.4,2.4-7.2,2.4-10.9C90.5,20.4,78.6,8.5,64,8.5S37.5,20.4,37.5,35c0,0.2,0,0.5,0,0.7c-13.2,5-22,17.6-22,31.8c0,18.7,15.3,34,34,34H59V124C59,124.8,59.7,125.5,60.5,125.5z M49.5,98.5c-17.1,0-31-13.9-31-31c0-13.3,8.5-25.1,21-29.4c0.6-0.2,1.1-0.8,1-1.5c0-0.5-0.1-1.1-0.1-1.6C40.5,22,51,11.5,64,11.5S87.5,22,87.5,35c0,3.8-0.9,7.6-2.7,11c-0.2,0.4-0.2,0.8-0.1,1.2c0.2,0.4,0.5,0.7,0.9,0.9c10.1,3.8,16.9,13.6,16.9,24.4c0,14.3-11.7,26-26,26H62v-9.9L81.2,79c0.7-0.4,1-1.3,0.7-2c-0.4-0.7-1.3-1-2-0.7L62,85.2V45c0-0.8-0.7-1.5-1.5-1.5S59,44.2,59,45v20.2l-17.8-8.9c-0.7-0.4-1.6-0.1-2,0.7c-0.4,0.7-0.1,1.6,0.7,2L59,68.6v29.9H49.5z" opacity="0.3"/>
             </svg>
             
             <span className="text-white/90 font-medium text-sm md:text-base">Del Amazonas con amor</span>
             
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-frutaza-amarillo group-hover:text-red-500 group-hover:scale-110 transition-all duration-300">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-frutatza-amarillo group-hover:text-red-500 group-hover:scale-110 transition-all duration-300">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
           </div>
         </div>
       </div>
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-frutaza-verde-vivo/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-frutaza-amarillo/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-frutatza-verde-vivo/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-frutatza-amarillo/10 rounded-full blur-3xl pointer-events-none" />
     </section>
   );
 }

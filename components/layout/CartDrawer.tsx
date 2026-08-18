@@ -60,14 +60,14 @@ export function CartDrawer() {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="bg-frutaza-verde-oscuro text-white p-6 flex items-center justify-between">
+          <div className="bg-frutatza-verde-oscuro text-white p-6 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-3xl">🛒</span>
               <h2 className="text-2xl font-display font-bold">Mi Carrito</h2>
             </div>
             <button
               onClick={closeCart}
-              className="text-white hover:text-frutaza-amarillo transition-colors duration-300 text-3xl"
+              className="text-white hover:text-frutatza-amarillo transition-colors duration-300 text-3xl"
               aria-label="Cerrar carrito"
             >
               ✕
@@ -85,7 +85,7 @@ export function CartDrawer() {
             ) : (
               <div className="space-y-4">
                 {cart.lines.edges.map(({ node: line }) => (
-                  <div key={line.id} className="flex gap-4 bg-frutaza-crema p-4 rounded-lg">
+                  <div key={line.id} className="flex gap-4 bg-frutatza-crema p-4 rounded-lg">
                     {/* Imagen */}
                     <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
                       {/* ── CAMBIO: featuredImage.url viene del adapter (images[0] del producto) */}
@@ -97,14 +97,14 @@ export function CartDrawer() {
                           className="object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-frutaza-amarillo to-frutaza-verde-vivo" />
+                        <div className="w-full h-full bg-gradient-to-br from-frutatza-amarillo to-frutatza-verde-vivo" />
                       )}
                     </div>
 
                     {/* Info */}
                     <div className="flex-1">
                       {/* ── CAMBIO: product.title mapeado desde name en el adapter */}
-                      <h3 className="font-semibold text-frutaza-verde-oscuro">
+                      <h3 className="font-semibold text-frutatza-verde-oscuro">
                         {line.merchandise.product.title}
                       </h3>
                       {/* ── CAMBIO: merchandise.title = variant.name o 'Único' */}
@@ -114,7 +114,7 @@ export function CartDrawer() {
                         {/* Controles cantidad */}
                         <div className="flex items-center gap-2">
                           <button
-                            className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-sm font-bold text-frutaza-verde-oscuro disabled:opacity-40"
+                            className="w-7 h-7 rounded-full border border-gray-300 flex items-center justify-center text-sm font-bold text-frutatza-verde-oscuro disabled:opacity-40"
                             disabled={line.quantity <= 1}
                             onClick={() => updateLine(line.id, line.quantity - 1)}
                           >
@@ -122,7 +122,7 @@ export function CartDrawer() {
                           </button>
                           <span className="min-w-[1.5rem] text-center">{line.quantity}</span>
                           <button
-                            className="w-7 h-7 rounded-full bg-frutaza-verde-vivo text-white flex items-center justify-center text-sm font-bold hover:bg-frutaza-verde-oscuro"
+                            className="w-7 h-7 rounded-full bg-frutatza-verde-vivo text-white flex items-center justify-center text-sm font-bold hover:bg-frutatza-verde-oscuro"
                             onClick={() => updateLine(line.id, line.quantity + 1)}
                           >
                             +
@@ -136,7 +136,7 @@ export function CartDrawer() {
                         </div>
 
                         {/* ── CAMBIO: totalAmount.amount sigue siendo string Money — sin cambios en JSX */}
-                        <span className="font-bold text-frutaza-verde-oscuro">
+                        <span className="font-bold text-frutatza-verde-oscuro">
                           ${parseFloat(line.cost.totalAmount.amount).toLocaleString('es-CO')}
                         </span>
                       </div>
@@ -152,7 +152,7 @@ export function CartDrawer() {
             <div className="border-t border-gray-200 p-6 bg-gray-50">
               <div className="flex justify-between items-center mb-4">
                 <span className="text-lg font-semibold text-gray-700">Subtotal:</span>
-                <span className="text-2xl font-bold text-frutaza-verde-oscuro">
+                <span className="text-2xl font-bold text-frutatza-verde-oscuro">
                   ${subtotal.toLocaleString('es-CO')} COP
                 </span>
               </div>
@@ -161,7 +161,7 @@ export function CartDrawer() {
               <button
                 onClick={handleCheckout}
                 disabled={!cart.checkoutUrl}
-                className="w-full bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white py-4 rounded-full font-bold text-lg transition-colors duration-300 transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-frutatza-verde-vivo hover:bg-frutatza-verde-oscuro text-white py-4 rounded-full font-bold text-lg transition-colors duration-300 transform hover:scale-105 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span>Pagar</span>
                 <span className="text-2xl">💳</span>

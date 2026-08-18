@@ -6,10 +6,10 @@ import type { Cart } from '@/lib/stockup/types';
 
 function getOrCreateSessionId(): string {
   if (typeof window === 'undefined') return '';
-  const existing = localStorage.getItem('frutaza-session-id');
+  const existing = localStorage.getItem('frutatza-session-id');
   if (existing) return existing;
   const newId = crypto.randomUUID();
-  localStorage.setItem('frutaza-session-id', newId);
+  localStorage.setItem('frutatza-session-id', newId);
   return newId;
 }
 
@@ -119,7 +119,7 @@ export const useCart = create<CartStore>()(
       },
     }),
     {
-      name: 'frutaza-cart',
+      name: 'frutatza-cart',
       partialize: (state) => ({ cart: state.cart }),
     }
   )

@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        frutaza: {
+        frutatza: {
           'verde-oscuro': '#0B4227',
           'verde-vivo': '#50AE31',
           'amarillo': '#F8AC1C',

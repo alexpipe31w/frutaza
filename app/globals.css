@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --frutaza-verde-oscuro: #0B4227;
-  --frutaza-verde-vivo: #50AE31;
-  --frutaza-amarillo: #F8AC1C;
-  --frutaza-crema: #F5F1E8;
+  --frutatza-verde-oscuro: #0B4227;
+  --frutatza-verde-vivo: #50AE31;
+  --frutatza-amarillo: #F8AC1C;
+  --frutatza-crema: #F5F1E8;
 }
 
 @layer base {

@@ -165,7 +165,7 @@ export default function BlogPage() {
   }, [mounted]);
 
   return (
-    <div className="relative min-h-screen pt-32 pb-0 bg-frutaza-crema overflow-x-hidden">
+    <div className="relative min-h-screen pt-32 pb-0 bg-frutatza-crema overflow-x-hidden">
       {/* HOJAS CAYENDO */}
       {mounted && (
         <div
@@ -208,7 +208,7 @@ export default function BlogPage() {
             fill="none" 
             stroke="currentColor" 
             strokeWidth={2} 
-            className="w-16 h-16 text-frutaza-verde-oscuro mx-auto hover:text-frutaza-verde-vivo transition-colors duration-300 mb-4"
+            className="w-16 h-16 text-frutatza-verde-oscuro mx-auto hover:text-frutatza-verde-vivo transition-colors duration-300 mb-4"
           >
             <path 
               d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"
@@ -232,23 +232,23 @@ export default function BlogPage() {
             />
             <path 
               d="M12 3v18"
-              className="text-frutaza-amarillo"
+              className="text-frutatza-amarillo"
               strokeWidth={1.5}
             />
           </svg>
-          <h1 className="text-5xl font-display font-bold text-frutaza-verde-oscuro mb-4">
+          <h1 className="text-5xl font-display font-bold text-frutatza-verde-oscuro mb-4">
             Nuestro Blog
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Historias, recetas y todo sobre las frutas amazónicas
           </p>
-          <div className="w-24 h-1 bg-frutaza-amarillo mx-auto rounded-full mt-6" />
+          <div className="w-24 h-1 bg-frutatza-amarillo mx-auto rounded-full mt-6" />
         </div>
 
         {/* ✨ VIDEOS DE TIKTOK - AUTOMÁTICOS */}
         <div className="mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-frutaza-verde-oscuro mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-frutatza-verde-oscuro mb-4">
               Síguenos en TikTok
             </h2>
             <p className="text-lg text-gray-600">
@@ -259,7 +259,7 @@ export default function BlogPage() {
           {/* LOADING STATE */}
           {loading ? (
             <div className="text-center py-12">
-              <div className="inline-block w-12 h-12 border-4 border-frutaza-verde-vivo border-t-transparent rounded-full animate-spin" />
+              <div className="inline-block w-12 h-12 border-4 border-frutatza-verde-vivo border-t-transparent rounded-full animate-spin" />
               <p className="mt-4 text-gray-600">Cargando videos...</p>
             </div>
           ) : tiktokVideos.length > 0 ? (
@@ -290,7 +290,7 @@ export default function BlogPage() {
                           }}
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-frutaza-verde-vivo/20 to-frutaza-amarillo/20 flex items-center justify-center">
+                        <div className="w-full h-full bg-gradient-to-br from-frutatza-verde-vivo/20 to-frutatza-amarillo/20 flex items-center justify-center">
                           <span className="text-7xl">🎬</span>
                         </div>
                       )}
@@ -316,7 +316,7 @@ export default function BlogPage() {
                       {/* Play icon */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center">
-                          <svg viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-frutaza-verde-oscuro ml-1">
+                          <svg viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-frutatza-verde-oscuro ml-1">
                             <path d="M8 5v14l11-7z"/>
                           </svg>
                         </div>
@@ -338,11 +338,11 @@ export default function BlogPage() {
         {/* REDES SOCIALES */}
         <div className="mb-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-frutaza-verde-oscuro mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-frutatza-verde-oscuro mb-4">
               Conéctate con Nosotros
             </h2>
             <p className="text-lg text-gray-600">
-              Síguenos en redes sociales y únete a la comunidad Frutaza 🌿
+              Síguenos en redes sociales y únete a la comunidad Frutatza 🌿
             </p>
           </div>
 
@@ -355,10 +355,10 @@ export default function BlogPage() {
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center gap-3 bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 hover:-translate-y-2"
               >
-                <div className="text-frutaza-verde-oscuro group-hover:text-frutaza-verde-vivo transition-colors duration-300">
+                <div className="text-frutatza-verde-oscuro group-hover:text-frutatza-verde-vivo transition-colors duration-300">
                   {social.icon}
                 </div>
-                <span className="text-sm font-semibold text-frutaza-verde-oscuro group-hover:text-frutaza-verde-vivo transition-colors duration-300">
+                <span className="text-sm font-semibold text-frutatza-verde-oscuro group-hover:text-frutatza-verde-vivo transition-colors duration-300">
                   {social.name}
                 </span>
               </a>
@@ -369,7 +369,7 @@ export default function BlogPage() {
         {/* Contenido del blog */}
         <div className="max-w-4xl mx-auto mb-12">
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <h2 className="text-2xl font-display font-bold text-frutaza-verde-oscuro mb-4">
+            <h2 className="text-2xl font-display font-bold text-frutatza-verde-oscuro mb-4">
               Más contenido próximamente
             </h2>
             <p className="text-gray-600">

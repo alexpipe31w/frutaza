@@ -136,12 +136,12 @@ export function CaquetaSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen py-20 bg-gradient-to-b from-frutaza-crema to-white"
+      className="relative min-h-screen py-20 bg-gradient-to-b from-frutatza-crema to-white"
     >
       <div className="container mx-auto px-4">
         {/* Título */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-display font-bold text-frutaza-verde-oscuro mb-6">
+          <h2 className="text-5xl md:text-6xl font-display font-bold text-frutatza-verde-oscuro mb-6">
             Caquetá: Tierra de Sabores
           </h2>
           <p className="text-xl text-gray-700 max-w-3xl mx-auto">
@@ -167,7 +167,7 @@ export function CaquetaSection() {
               {/* Controles */}
               <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-frutaza-verde-oscuro/80 hover:bg-frutaza-verde-oscuro text-white p-4 rounded-full transition-all duration-300 hover:scale-110 z-10"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-frutatza-verde-oscuro/80 hover:bg-frutatza-verde-oscuro text-white p-4 rounded-full transition-all duration-300 hover:scale-110 z-10"
                 aria-label="Anterior"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,7 +177,7 @@ export function CaquetaSection() {
 
               <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-frutaza-verde-oscuro/80 hover:bg-frutaza-verde-oscuro text-white p-4 rounded-full transition-all duration-300 hover:scale-110 z-10"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-frutatza-verde-oscuro/80 hover:bg-frutatza-verde-oscuro text-white p-4 rounded-full transition-all duration-300 hover:scale-110 z-10"
                 aria-label="Siguiente"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,11 +196,11 @@ export function CaquetaSection() {
               {/* Slide actual destacado */}
               <div className="transition-all duration-500">
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-frutaza-verde-vivo/20 to-frutaza-amarillo/20 rounded-2xl flex items-center justify-center text-3xl">
+                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-frutatza-verde-vivo/20 to-frutatza-amarillo/20 rounded-2xl flex items-center justify-center text-3xl">
                     {slides[currentSlide].icon}
                   </div>
                   <div>
-                    <h3 className="text-2xl font-display font-bold text-frutaza-verde-oscuro mb-3">
+                    <h3 className="text-2xl font-display font-bold text-frutatza-verde-oscuro mb-3">
                       {slides[currentSlide].title}
                     </h3>
                     <p className="text-lg text-gray-700 leading-relaxed">
@@ -218,7 +218,7 @@ export function CaquetaSection() {
                     onClick={() => setCurrentSlide(index)}
                     className={`h-2 rounded-full transition-all duration-300 ${
                       index === currentSlide
-                        ? 'w-12 bg-frutaza-amarillo'
+                        ? 'w-12 bg-frutatza-amarillo'
                         : 'w-2 bg-gray-300 hover:bg-gray-400'
                     }`}
                     aria-label={`Ir a slide ${index + 1}`}

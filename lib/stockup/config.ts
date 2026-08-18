@@ -5,7 +5,8 @@ export const stockupConfig = {
   // URL base de la plataforma StockUp
   apiUrl: process.env.NEXT_PUBLIC_STOCKUP_API_URL || 'https://stock-up-ashy.vercel.app',
 
-  // Slug del tenant de Frutaza
+  // Slug del tenant en StockUp. OJO: sigue siendo 'frutaza' (identificador interno de
+  // StockUp, no marca visible). Solo se cambia aqui DESPUES de renombrarlo en StockUp.
   tenantSlug: process.env.NEXT_PUBLIC_STOCKUP_TENANT_SLUG || 'frutaza',
 
   // IMPORTANTE: La API Key NO debe ser NEXT_PUBLIC_ para no exponerse en el browser.

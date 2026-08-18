@@ -338,12 +338,12 @@ export function HeroSection() {
         >
           <div className="rounded-3xl p-8 md:p-12">
             <div ref={titleRef} className="mb-6 w-full flex justify-center">
-              <div className="relative w-full max-w-[210px] md:max-w-[220px] lg:max-w-[300px] -mt-8 md:mt-0 group">
+              <div className="relative w-full max-w-[300px] md:max-w-[400px] lg:max-w-[520px] -mt-8 md:mt-0 group">
                 <Image
-                  src="/images/logo-fondo-oscuro.png"
-                  alt="Frutaza - Frutas Salvajes, Dulzura Natural"
-                  width={1200}
-                  height={400}
+                  src="/images/logo-frutatza-contorno.png"
+                  alt="Frutatza - Frutas Salvajes, Dulzura Natural"
+                  width={1600}
+                  height={365}
                   quality={100}
                   priority
                   unoptimized
@@ -370,7 +370,7 @@ export function HeroSection() {
             >
               <Link
                 href="/products"
-                className="group px-8 py-4 bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center gap-2"
+                className="group px-8 py-4 bg-frutatza-verde-vivo hover:bg-frutatza-verde-oscuro text-white rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center gap-2"
               >
                 Ver Productos
                 <span className="group-hover:translate-x-1 transition-transform">
@@ -380,7 +380,7 @@ export function HeroSection() {
 
               <Link
                 href="#historia"
-                className="px-8 py-4 bg-white/90 hover:bg-white text-frutaza-verde-oscuro rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl backdrop-blur-sm flex items-center gap-2"
+                className="px-8 py-4 bg-white/90 hover:bg-white text-frutatza-verde-oscuro rounded-full font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl backdrop-blur-sm flex items-center gap-2"
               >
                 Nuestra Esencia
               </Link>

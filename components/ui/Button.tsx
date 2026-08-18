@@ -16,9 +16,9 @@ export function Button({
   const baseStyles = 'font-semibold rounded-full transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100';
   
   const variants = {
-    primary: 'bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white',
-    secondary: 'bg-frutaza-amarillo hover:bg-yellow-600 text-white',
-    outline: 'border-2 border-frutaza-verde-vivo text-frutaza-verde-oscuro hover:bg-frutaza-verde-vivo hover:text-white',
+    primary: 'bg-frutatza-verde-vivo hover:bg-frutatza-verde-oscuro text-white',
+    secondary: 'bg-frutatza-amarillo hover:bg-yellow-600 text-white',
+    outline: 'border-2 border-frutatza-verde-vivo text-frutatza-verde-oscuro hover:bg-frutatza-verde-vivo hover:text-white',
   };
 
   const sizes = {

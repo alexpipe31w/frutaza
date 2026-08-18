@@ -19,12 +19,12 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Frutaza - Frutas Salvajes, Dulzura Natural',
+  title: 'Frutatza - Frutas Salvajes, Dulzura Natural',
   description: 'Mermeladas artesanales del Caquetá con frutas amazónicas 100% naturales',
   keywords: 'mermeladas, frutas amazónicas, Caquetá, Colombia, artesanal, natural',
-  authors: [{ name: 'Frutaza' }],
+  authors: [{ name: 'Frutatza' }],
   openGraph: {
-    title: 'Frutaza - Frutas Salvajes, Dulzura Natural',
+    title: 'Frutatza - Frutas Salvajes, Dulzura Natural',
     description: 'Mermeladas artesanales del Caquetá con frutas amazónicas',
     type: 'website',
     locale: 'es_CO',
@@ -38,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="scroll-smooth">
-      <body className={`${inter.variable} ${playfair.variable} font-sans bg-frutaza-crema antialiased`}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans bg-frutatza-crema antialiased`}>
         <NavbarAnimated />
         <EfectosSelva />
         <main className="min-h-screen">

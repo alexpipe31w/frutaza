@@ -48,13 +48,13 @@ const valores = [
       <path 
         d="M26,14h0A13.45,13.45,0,0,1,36.19,1L40,0,39,3.81A13.45,13.45,0,0,1,26,14Z" 
         fill="currentColor"
-        className="text-frutaza-verde-vivo"
+        className="text-frutatza-verde-vivo"
       />
       {/* Hoja izquierda */}
       <path 
         d="M26,14h0A13.45,13.45,0,0,0,15.81,1L12,0l1,3.81A13.45,13.45,0,0,0,26,14Z" 
         fill="currentColor"
-        className="text-frutaza-verde-vivo"
+        className="text-frutatza-verde-vivo"
       />
       {/* Naranja */}
       <circle 
@@ -62,7 +62,7 @@ const valores = [
         cy="38" 
         r="26" 
         fill="currentColor"
-        className="text-frutaza-amarillo"
+        className="text-frutatza-amarillo"
       />
     </svg>
   ),
@@ -254,7 +254,7 @@ export function SelloSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen py-20 bg-frutaza-verde-oscuro overflow-hidden"
+      className="relative min-h-screen py-20 bg-frutatza-verde-oscuro overflow-hidden"
     >
       {/* ONDA SUPERIOR - Separa de la sección de arriba */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
@@ -281,7 +281,7 @@ export function SelloSection() {
         >
           <path
             d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="fill-frutaza-amarillo"
+            className="fill-frutatza-amarillo"
           />
         </svg>
       </div>
@@ -348,7 +348,7 @@ export function SelloSection() {
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-display font-bold text-white mb-6 mt-[55px]">
-            El Sello Frutaza
+            El Sello Frutatza
           </h2>
           <p className="text-xl text-white/90 max-w-3xl mx-auto">
             Nuestro compromiso con la calidad, sostenibilidad y preservación del patrimonio
@@ -360,10 +360,10 @@ export function SelloSection() {
           {valores.map((valor, index) => (
             <div
               key={index}
-              className="valor-card group bg-frutaza-verde-oscuro/60 backdrop-blur-sm border-2 border-frutaza-verde-vivo/30 rounded-3xl p-8 transition-all duration-500 hover:border-frutaza-verde-vivo hover:transform hover:scale-105 hover:shadow-2xl"
+              className="valor-card group bg-frutatza-verde-oscuro/60 backdrop-blur-sm border-2 border-frutatza-verde-vivo/30 rounded-3xl p-8 transition-all duration-500 hover:border-frutatza-verde-vivo hover:transform hover:scale-105 hover:shadow-2xl"
             >
-              <div className="w-28 h-28 bg-gradient-to-br from-frutaza-verde-vivo/30 to-frutaza-amarillo/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <div className="text-frutaza-amarillo group-hover:text-frutaza-verde-vivo transition-colors duration-300">
+              <div className="w-28 h-28 bg-gradient-to-br from-frutatza-verde-vivo/30 to-frutatza-amarillo/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="text-frutatza-amarillo group-hover:text-frutatza-verde-vivo transition-colors duration-300">
                   {valor.icon}
                 </div>
               </div>
@@ -371,7 +371,7 @@ export function SelloSection() {
               <h3 className="text-2xl font-display font-bold text-white mb-4">{valor.title}</h3>
               <p className="text-lg text-white/80 leading-relaxed">{valor.description}</p>
 
-              <div className="w-full h-1 bg-gradient-to-r from-frutaza-verde-vivo to-frutaza-amarillo rounded-full mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="w-full h-1 bg-gradient-to-r from-frutatza-verde-vivo to-frutatza-amarillo rounded-full mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           ))}
         </div>

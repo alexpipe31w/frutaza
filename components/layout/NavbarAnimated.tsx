@@ -46,8 +46,8 @@ export function NavbarAnimated() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img
-              src="/images/logo-redondo.png"
-              alt="Frutaza - Frutas Salvajes, Dulzura Natural"
+              src="/images/logo-circular.png"
+              alt="Frutatza - Frutas Salvajes, Dulzura Natural"
               className="h-12 md:h-16 w-auto"
             />
           </Link>
@@ -56,25 +56,25 @@ export function NavbarAnimated() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/"
-              className="text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo font-semibold transition-colors duration-300"
+              className="text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo font-semibold transition-colors duration-300"
             >
               Inicio
             </Link>
             <Link
               href="/products"
-              className="text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo font-semibold transition-colors duration-300"
+              className="text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo font-semibold transition-colors duration-300"
             >
               Productos
             </Link>
             <Link
               href="/blog"
-              className="text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo font-semibold transition-colors duration-300"
+              className="text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo font-semibold transition-colors duration-300"
             >
               Blog
             </Link>
             <button
               onClick={open}
-              className="text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo transition-colors duration-300 font-semibold"
+              className="text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo transition-colors duration-300 font-semibold"
             >
               Contacto
             </button>
@@ -93,7 +93,7 @@ export function NavbarAnimated() {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2}
-                className="w-8 h-8 text-frutaza-verde-oscuro group-hover:text-frutaza-verde-vivo transition-colors duration-300"
+                className="w-8 h-8 text-frutatza-verde-oscuro group-hover:text-frutatza-verde-vivo transition-colors duration-300"
               >
                 <circle cx={9} cy={21} r={1} fill="currentColor" />
                 <circle cx={20} cy={21} r={1} fill="currentColor" />
@@ -105,7 +105,7 @@ export function NavbarAnimated() {
               </svg>
 
               {totalItems > 0 && (
-                <div className="absolute -top-2 -right-2 bg-frutaza-amarillo text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold animate-bounce">
+                <div className="absolute -top-2 -right-2 bg-frutatza-amarillo text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold animate-bounce">
                   {totalItems}
                 </div>
               )}
@@ -114,7 +114,7 @@ export function NavbarAnimated() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo transition-colors duration-300"
+              className="md:hidden text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo transition-colors duration-300"
               aria-label="Menú"
             >
               {mobileMenuOpen ? (
@@ -148,21 +148,21 @@ export function NavbarAnimated() {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo font-semibold transition-colors duration-300 py-2"
+              className="block text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo font-semibold transition-colors duration-300 py-2"
             >
               Inicio
             </Link>
             <Link
               href="/products"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo font-semibold transition-colors duration-300 py-2"
+              className="block text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo font-semibold transition-colors duration-300 py-2"
             >
               Productos
             </Link>
             <Link
               href="/blog"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo font-semibold transition-colors duration-300 py-2"
+              className="block text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo font-semibold transition-colors duration-300 py-2"
             >
               Blog
             </Link>
@@ -171,7 +171,7 @@ export function NavbarAnimated() {
                 open();
                 setMobileMenuOpen(false);
               }}
-              className="block w-full text-left text-frutaza-verde-oscuro hover:text-frutaza-verde-vivo transition-colors duration-300 font-semibold py-2"
+              className="block w-full text-left text-frutatza-verde-oscuro hover:text-frutatza-verde-vivo transition-colors duration-300 font-semibold py-2"
             >
               Contacto
             </button>

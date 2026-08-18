@@ -33,21 +33,21 @@ const handleAddToCart = (productId: string, variantId: string | null, quantity: 
 };
 
   return (
-    <section className="relative py-20 bg-frutaza-crema overflow-visible">
+    <section className="relative py-20 bg-frutatza-crema overflow-visible">
       <div className="relative z-[1]">
         <div className="container mx-auto px-4 text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-bold text-frutaza-verde-oscuro mb-4">
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-frutatza-verde-oscuro mb-4">
             Productos destacados
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
             Descubre nuestras mermeladas artesanales elaboradas con frutas amazónicas
           </p>
-          <div className="w-24 h-1 bg-frutaza-amarillo mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-frutatza-amarillo mx-auto rounded-full" />
         </div>
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-frutaza-verde-vivo" />
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-frutatza-verde-vivo" />
             <p className="mt-4 text-gray-600">Cargando productos...</p>
           </div>
         ) : products.length > 0 ? (

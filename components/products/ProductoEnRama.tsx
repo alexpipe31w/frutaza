@@ -137,17 +137,17 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
             />
           </div>
         ) : (
-          <div className="relative z-10 w-[62%] mb-12 aspect-square bg-gradient-to-br from-frutaza-amarillo to-frutaza-verde-vivo rounded-3xl" />
+          <div className="relative z-10 w-[62%] mb-12 aspect-square bg-gradient-to-br from-frutatza-amarillo to-frutatza-verde-vivo rounded-3xl" />
         )}
       </div>
 
       {/* Preview siempre visible: título + precio */}
       <div className="text-center px-3 -mt-12 pt-2 pb-1 relative z-10">
         <div className="inline-block bg-white/80 backdrop-blur-sm rounded-xl px-3 py-1.5 shadow-sm">
-          <h3 className="text-base font-display font-bold text-frutaza-verde-oscuro leading-tight mb-0.5">
+          <h3 className="text-base font-display font-bold text-frutatza-verde-oscuro leading-tight mb-0.5">
             {product.title}
           </h3>
-          <p className="text-lg font-bold text-frutaza-amarillo">
+          <p className="text-lg font-bold text-frutatza-amarillo">
             ${precioNumerico.toLocaleString('es-CO')}
             <span className="text-xs font-normal text-gray-500 ml-1">{precio.currencyCode}</span>
           </p>
@@ -173,7 +173,7 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                     key={i}
                     className={
                       isBold
-                        ? 'font-semibold text-frutaza-verde-oscuro'
+                        ? 'font-semibold text-frutatza-verde-oscuro'
                         : 'leading-relaxed'
                     }
                   >
@@ -206,8 +206,8 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                       }}
                       className={`px-3 py-1 rounded-full text-sm border transition-colors ${
                         active
-                          ? 'bg-frutaza-verde-vivo text-white border-frutaza-verde-vivo'
-                          : 'bg-white text-frutaza-verde-oscuro border-gray-300 hover:border-frutaza-verde-vivo'
+                          ? 'bg-frutatza-verde-vivo text-white border-frutatza-verde-vivo'
+                          : 'bg-white text-frutatza-verde-oscuro border-gray-300 hover:border-frutatza-verde-vivo'
                       }`}
                     >
                       {label}
@@ -220,7 +220,7 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
 
           {/* Precio + botón agregar */}
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-bold text-frutaza-amarillo">
+            <span className="text-2xl font-bold text-frutatza-amarillo">
               ${precioNumerico.toLocaleString('es-CO')}
               <span className="text-xs ml-1 font-normal text-gray-500">{precio.currencyCode}</span>
             </span>
@@ -238,15 +238,15 @@ export function ProductoEnRama({ product, index, onAddToCart }: Props) {
                 }
               }}
               disabled={!selectedVariant}
-              className="bg-frutaza-verde-vivo hover:bg-frutaza-verde-oscuro text-white px-5 py-2.5 rounded-full font-semibold transition-colors duration-300 transform hover:scale-105 disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
+              className="bg-frutatza-verde-vivo hover:bg-frutatza-verde-oscuro text-white px-5 py-2.5 rounded-full font-semibold transition-colors duration-300 transform hover:scale-105 disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
             >
               Agregar
             </button>
           </div>
 
-          <div className="mt-3 inline-flex items-center gap-2 bg-frutaza-crema px-3 py-1.5 rounded-full">
+          <div className="mt-3 inline-flex items-center gap-2 bg-frutatza-crema px-3 py-1.5 rounded-full">
             <span className="text-base">🌿</span>
-            <span className="text-xs font-semibold text-frutaza-verde-oscuro">100% Natural</span>
+            <span className="text-xs font-semibold text-frutatza-verde-oscuro">100% Natural</span>
           </div>
         </div>
       )}

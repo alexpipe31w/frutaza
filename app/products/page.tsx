@@ -118,7 +118,7 @@ export default function ProductsPage() {
   }, [mounted]);
 
   return (
-    <div className="relative min-h-screen pt-32 pb-20 bg-frutaza-crema overflow-hidden">
+    <div className="relative min-h-screen pt-32 pb-20 bg-frutatza-crema overflow-hidden">
       {/* Hojas cayendo — sin cambios */}
       {mounted && (
         <div
@@ -156,11 +156,11 @@ export default function ProductsPage() {
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-16">
           <img
-            src="/images/logo-redondo.png"
-            alt="Frutaza"
+            src="/images/logo-circular.png"
+            alt="Frutatza"
             className="w-12 h-12 md:w-16 md:h-16 flex mx-auto mb-4"
           />
-          <h1 className="text-5xl font-display font-bold text-frutaza-verde-oscuro mb-4">
+          <h1 className="text-5xl font-display font-bold text-frutatza-verde-oscuro mb-4">
             Nuestros Productos
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">

@@ -1,5 +1,5 @@
-// app/api/stockup/cart/route.ts (en Frutaza)
-// Proxy entre Frutaza y el endpoint público del carrito de StockUp.
+// app/api/stockup/cart/route.ts (en Frutatza)
+// Proxy entre Frutatza y el endpoint público del carrito de StockUp.
 // StockUp endpoint: /api/public/v1/cart (GET, POST, PATCH)
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -12,7 +12,7 @@ const HEADERS = {
 };
 
 // ─── Adaptador: respuesta pública del carrito → Cart compatible con Shopify ──
-// FIX: ahora recibe sessionId (el frutaza-session-id) para construir checkoutUrl correcta
+// FIX: ahora recibe sessionId (el frutatza-session-id) para construir checkoutUrl correcta
 function adaptCart(data: any, sessionId?: string) {
   if (!data) return null;
 
@@ -31,7 +31,7 @@ function adaptCart(data: any, sessionId?: string) {
           product: {
             title: item.product?.name || '',
             featuredImage: {
-              url: productImage || '/images/logo-redondo.png',
+              url: productImage || '/images/logo-circular.png',
               altText: item.product?.name || null,
               width: 600,
               height: 600,
@@ -55,7 +55,7 @@ function adaptCart(data: any, sessionId?: string) {
   const subtotal = Number(data.totalValue ?? 0);
   const firstItem = data.items?.[0];
 
-  // FIX PRINCIPAL: usar data.sessionId (el frutaza-session-id guardado en StockUp)
+  // FIX PRINCIPAL: usar data.sessionId (el frutatza-session-id guardado en StockUp)
   // como cartSessionId. El parámetro sessionId que llega aquí ES ese valor
   // porque el POST lo manda desde useCart → cartFetch → body.sessionId
   const cartSessionId = data.sessionId || sessionId;
