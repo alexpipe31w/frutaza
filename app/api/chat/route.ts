@@ -1,6 +1,10 @@
 import Groq from 'groq-sdk';
 import { NextRequest, NextResponse } from 'next/server';
 
+// gpt-oss responde con mucho Markdown y el widget lo pinta como texto plano.
+const PLAIN_TEXT_RULE =
+  'Formato: el chat muestra texto plano, no Markdown. No uses asteriscos, almohadillas, tablas ni barras verticales; usa frases cortas, saltos de línea, guiones simples y emojis.';
+
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!
 });
@@ -137,7 +141,9 @@ export async function POST(req: NextRequest) {
     const messages = [
       {
         role: 'system',
-        content: FRUTATZA_CONTEXT
+        content: `${FRUTATZA_CONTEXT}
+
+${PLAIN_TEXT_RULE}`
       },
       // Historial
       ...history.map((msg: any) => ({
