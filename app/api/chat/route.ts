@@ -5,6 +5,11 @@ import { NextRequest, NextResponse } from 'next/server';
 const PLAIN_TEXT_RULE =
   'Formato: el chat muestra texto plano, no Markdown. No uses asteriscos, almohadillas, tablas ni barras verticales; usa frases cortas, saltos de línea, guiones simples y emojis.';
 
+// Red de seguridad: aunque el prompt pide texto plano, gpt-oss a veces cuela negritas.
+function stripMarkdown(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, '$1').replace(/^#{1,6}\s+/gm, '');
+}
+
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY!
 });
@@ -172,7 +177,7 @@ ${PLAIN_TEXT_RULE}`
       console.warn('[chat] respuesta cortada por max_tokens', { usage: completion.usage });
     }
 
-    const response = completion.choices[0]?.message?.content || 'Error al generar respuesta';
+    const response = stripMarkdown(completion.choices[0]?.message?.content || 'Error al generar respuesta');
 
     return NextResponse.json({ response });
   } catch (error) {
