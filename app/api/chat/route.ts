@@ -153,10 +153,18 @@ export async function POST(req: NextRequest) {
 
     const completion = await groq.chat.completions.create({
       messages: messages,
-      model: 'llama-3.3-70b-versatile', // Muy potente y rápido
+      // llama-3.3-70b-versatile lo retiró Groq el 16-08-2026; este es su reemplazo recomendado.
+      model: 'openai/gpt-oss-120b',
       temperature: 0.7,
-      max_tokens: 1024,
+      // gpt-oss razona antes de responder y ese razonamiento sale del mismo max_tokens:
+      // con 1024 las respuestas llegaban cortadas. Esfuerzo bajo = respuestas de chat rápidas.
+      reasoning_effort: 'low',
+      max_tokens: 2000,
     });
+
+    if (completion.choices[0]?.finish_reason === 'length') {
+      console.warn('[chat] respuesta cortada por max_tokens', { usage: completion.usage });
+    }
 
     const response = completion.choices[0]?.message?.content || 'Error al generar respuesta';
 
