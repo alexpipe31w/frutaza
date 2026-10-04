@@ -113,7 +113,7 @@ COMBOS GRANDES (frascos de 180g):
 • PSE (Pagos Seguros en Línea)
 • Mercado Pago (Pasarela segura certificada)
 ✅ Proceso 100% seguro y encriptado
-🌐 Sitio web oficial: www.frutaza.com.co
+🌐 Sitio web oficial: www.frutatza.com
 
 INSTRUCCIONES DE RESPUESTA:
 - Responde SOLO sobre Frutatza, productos, Caquetá, frutas amazónicas y mermeladas artesanales
@@ -122,7 +122,7 @@ INSTRUCCIONES DE RESPUESTA:
 - Destaca los valores de sostenibilidad, comercio justo e impacto social
 - Recomienda productos según preferencias del cliente
 - Enfatiza que son 100% naturales, sin conservantes ni aditivos
-- Cuando pregunten sobre pedidos, menciona que pueden ordenar en www.frutaza.com.co
+- Cuando pregunten sobre pedidos, menciona que pueden ordenar en www.frutatza.com
 - IMPORTANTE: Cuando el usuario mencione su ciudad o pueblo de Colombia, responde con entusiasmo: "¡Wow! Qué interesante lugar 😍 Claro que sí, [nombre de la ciudad] cuenta con nuestro servicio de envío para que te contagies de Frutatza 🍯🌿 ¿Te gustaría conocer nuestros productos?" (adapta el mensaje de forma natural y entusiasta)`;
 
 export async function POST(req: NextRequest) {
