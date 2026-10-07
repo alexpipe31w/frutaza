@@ -9,7 +9,7 @@ const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
 
 // Handle de TikTok. Configurable por env para poder cambiarlo sin desplegar codigo
 // (el perfil se renombro y el scraper estuvo semanas devolviendo "profile does not exist").
-const TIKTOK_PROFILE = process.env.TIKTOK_PROFILE || '@fruta.za';
+const TIKTOK_PROFILE = process.env.TIKTOK_PROFILE || '@frutatza';
 
 type ApifyItem = {
   error?: string;

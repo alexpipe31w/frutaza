@@ -183,7 +183,7 @@ export function Footer() {
                 </a>
 
                 <a
-                  href="https://tiktok.com/@fruta.za"
+                  href="https://tiktok.com/@frutatza"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group"
