@@ -44,10 +44,35 @@ function extractVariantLabel(name: string): string {
   return name.replace(/✨/g, '').replace(/\s+/g, ' ').trim();
 }
 
+function plain(str: string): string {
+  return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+// Etiqueta de la variante. Si el nombre sin el tamaño ya esta en el nombre del producto
+// ("Mermelada de Arazá 250G" en "Mermelada de Arazá") lo que distingue es el tamaño.
+// Si no ("Pulpa de Arazá 100 g" en "PULPAS AMAZÓNICAS 100 g") lo que distingue es el
+// sabor: con solo el tamaño las 5 pulpas salian todas como "100 G".
+function variantLabel(variantName: string, productName?: string | null): string {
+  const sinTamano = variantName
+    .replace(/✨/g, '')
+    .replace(/[-\s]+\d+\s*(?:GR|G|ML|KG|L)\s*$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!sinTamano || !productName || plain(productName).includes(plain(sinTamano))) {
+    return extractVariantLabel(variantName);
+  }
+  return sinTamano;
+}
+
 // ─── Variante ────────────────────────────────────────────────────────────────
 
-export function adaptVariant(v: StockUpVariant, productPrice: number): ProductVariant {
+export function adaptVariant(
+  v: StockUpVariant,
+  productPrice: number,
+  productName?: string
+): ProductVariant {
   const attributes = v.attributes || {};
+  const label = variantLabel(v.name, productName);
 
   const selectedOptions =
     Object.keys(attributes).length > 0
@@ -55,11 +80,11 @@ export function adaptVariant(v: StockUpVariant, productPrice: number): ProductVa
           name,
           value: String(value),
         }))
-      : [{ name: 'Presentación', value: extractVariantLabel(v.name) }];
+      : [{ name: 'Presentación', value: label }];
 
   return {
     id: v.id,
-    title: extractVariantLabel(v.name),
+    title: label,
     availableForSale: v.stock > 0,
     selectedOptions,
     price: toMoney(v.price ?? productPrice),
@@ -81,7 +106,7 @@ export function adaptProduct(p: StockUpProduct): Product {
   const rawVariants = Array.isArray(p.variants) ? p.variants : [];
   const variantEdges = rawVariants
     .filter((v) => v.isActive !== false) // defensivo: incluye si isActive es true o undefined
-    .map((v) => ({ node: adaptVariant(v, p.price) }));
+    .map((v) => ({ node: adaptVariant(v, p.price, p.name) }));
 
   if (variantEdges.length === 0) {
     variantEdges.push({
@@ -131,7 +156,7 @@ function adaptCartItem(item: StockUpCartItem): CartLine {
     quantity: item.quantity,
     merchandise: {
       id: item.variantId || item.productId,
-      title: item.variant?.name ? extractVariantLabel(item.variant.name) : 'Único',
+      title: item.variant?.name ? variantLabel(item.variant.name, item.product?.name) : 'Único',
       product: {
         title: item.product?.name || '',
         featuredImage: toImage(productImage, item.product?.name),

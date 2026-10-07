@@ -32,6 +32,15 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.shopify.com',
       },
+      // Imagenes propias referenciadas con URL absoluta desde StockUp (variantes)
+      {
+        protocol: 'https',
+        hostname: 'frutatza.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.frutatza.com',
+      },
       // Cloudinary
       {
         protocol: 'https',
